@@ -22,9 +22,17 @@ function RecipeDetails({match}) {
 
     return (
         <div className="recipe-details-wrapper">
-            {recipeItem.map(item => (
-                <h3 key={item.number}>{item.step}</h3>
-            ))}
+                <div className="container">
+                    <div className="row">
+                        <div className="col-md-12">
+                            <ul className="list-group">
+                            {recipeItem.map(item => (
+                <li className="list-group-item" key={item.number}>{item.step}</li>
+                ))}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
         </div>
     )
 }
