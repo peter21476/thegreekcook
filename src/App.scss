@@ -1,0 +1,83 @@
+
+$darkblue: #120136;
+$semidarkblue: #035aa6;
+$lightblue: #40bad5;
+$yellow: #fcbf1e;
+
+body {
+  background:$lightblue;
+}
+
+.recipe-wrapper {
+  width:100%;
+  border:1px solid #333;
+  box-shadow:1px 1px 8px black;
+  height:100%;
+  background:white;
+  .recipe-image {
+    background-size:cover;
+    background-position:center center;
+    background-repeat: no-repeat;
+    width:100%;
+    height:200px;
+  }
+
+  h5 {
+    color:#035aa6;
+  }
+}
+
+.recipe-column {
+  margin-bottom:20px;
+}
+
+.recipe-text {
+  padding:10px;
+}
+
+
+.row-eq-height-xs {
+  display: flex;
+  display: -webkit-flex;
+  flex-wrap: wrap;
+}
+
+.search-wrapper {
+  display:block;
+  margin:0 auto;
+  width:100%;
+  max-width:800px;
+  margin-top:20px;
+  margin-bottom:20px;
+  #search-box {
+    width:100%;
+    max-width:700px;
+    border:2px solid $yellow;
+    outline: none;
+    height:50px;
+    vertical-align: top;
+    padding-left:10px;
+  }
+}
+
+.btn-search {
+  background-color: $semidarkblue;
+  border:$semidarkblue;
+  color:white;
+  border-radius: 0px;
+  height:50px;
+  vertical-align: top;
+  &:hover {
+    background-color: $darkblue;
+    border:darkblue;
+    color:white;
+  }
+}
+
+#results-col {
+  display:none;
+}
+
+nav {
+  margin:0 auto;
+}
