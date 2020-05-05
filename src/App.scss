@@ -37,6 +37,10 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+.btn {
+  border-radius:0px;
+}
+
 .recipe-column {
   margin-bottom:20px;
 }
@@ -139,4 +143,57 @@ nav.pagination-nav {
     background-color:$yellow;
     border-color:$yellow;
   }
+}
+
+.suggested-row {
+  padding-top:40px;
+  h2 {
+    color:white;
+    text-shadow: 1px 1px 4px black;
+    padding-bottom:20px;
+  }
+}
+
+.button-link {
+  text-align: center;
+  margin-bottom: 30px;
+  .btn-item {
+    background-color:$semidarkblue;
+    color:white;
+    border-color:$semidarkblue;
+    margin:0 auto;
+    &:hover {
+      background-color:$yellow;
+      border-color:$yellow;
+      color:$semidarkblue;
+    }
+  }
+}
+
+.results-wrapper {
+  .navigation-item {
+    padding-left:0;
+    padding-right:0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+
+  input {
+    padding-bottom: 7px;
+    padding-top: 3px;
+  }
+}
+
+.btn-search-res {
+  background-color:$lightblue;
+  border-color:$lightblue;
+  color:white;
+
+  &:hover {
+    background-color:$yellow;
+    border-color:$yellow;
+    color:$lightblue;
+  }
+
 }

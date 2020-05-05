@@ -16,8 +16,6 @@ function RecipeDetails({match}) {
 
     const APP_KEY = "b84bdb70ee5a4becb4f63624084e355d";
 
-    const baseUrl = "https://spoonacular.com/recipeImages/";
-
     const [recipeItem,
         setRecipeItem] = useState([]);
 
@@ -33,8 +31,17 @@ function RecipeDetails({match}) {
         const data = await response.json();
         setRecipeItem(data);
         setIngedients(data.extendedIngredients);
-        setInstructions(data.analyzedInstructions[0].steps);
 
+        if(data.analyzedInstructions[0] === undefined) {
+            setInstructions([
+                {
+                "number":1,
+                "step":"Instructions are not being included for this recipe"
+                }
+            ]);
+        } else {
+            setInstructions(data.analyzedInstructions[0].steps);
+        }
     }
 
     return (

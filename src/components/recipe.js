@@ -21,7 +21,7 @@ function recipeModel({title, image, minutes, servings, recipeId}) {
             Servings: {servings}</p>
                 </div>
                 <div className="button-link">
-                        <Link to={`/result-item/${recipeId}`}>More Details...</Link>
+                        <Link to={`/result-item/${recipeId}`}><button className="btn btn-item">View Recipe</button></Link>
                 </div>
             </div>
         </div>
