@@ -50,7 +50,7 @@ function RecipeDetails({match}) {
             <div className="row">
                     <div className="col-md-12">
                         <nav>
-                            <a onClick={() => history.goBack()} className="btn btn-menu" href="#">Back to Results</a>
+                            <button onClick={() => history.goBack()} className="btn btn-menu">Back to Results</button>
                             <Link to="/"><button className="btn btn-menu" href="#">Home</button></Link>
                         </nav>
                     </div>

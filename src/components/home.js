@@ -37,7 +37,7 @@ function Home() {
                 <div className="row">
                     <div className="col-md-12">
                         <div className="search-wrapper">
-                            <input type="text" id="search-box" onChange={getValue}/>
+                            <input placeholder="Add one more ingredients..." type="text" id="search-box" onChange={getValue}/>
                             <Link to={`/results/${searchValue}`}>
                                 <button className="btn btn-search">Search</button>
                             </Link>

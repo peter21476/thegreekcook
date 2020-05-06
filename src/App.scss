@@ -18,6 +18,14 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Nunito', sans-serif;
 }
 
+.header-section {
+  p {
+    color:white;
+    font-style: italic;
+    text-shadow: 1px 1px 5px black;
+  }
+}
+
 .recipe-wrapper {
   width:100%;
   border:1px solid #333;
@@ -63,9 +71,10 @@ h1, h2, h3, h4, h5, h6 {
   max-width:800px;
   margin-top:20px;
   margin-bottom:20px;
+  text-align: center;
   #search-box {
     width:100%;
-    max-width:700px;
+    max-width:80%;
     border:2px solid $yellow;
     outline: none;
     height:50px;
@@ -94,6 +103,10 @@ h1, h2, h3, h4, h5, h6 {
 
 nav.pagination-nav {
   margin:0 auto;
+}
+
+ul.pagination {
+  justify-content: center;
 }
 
 .recipe-details {
@@ -131,6 +144,21 @@ nav.pagination-nav {
   background:$semidarkblue;
   padding-top:10px;
   padding-bottom:10px;
+  position:relative;
+  margin-top:30px;
+  &:before {
+    content:'';
+    display:block;
+    width:100%;
+    position: absolute;
+    left:0;
+    top:-30px;
+    background-image:url(./img/fret-blue.png);
+    background-repeat:repeat;
+    background-size:contain;
+    height:30px;
+
+  }
 }
 
 .btn-menu {
@@ -171,6 +199,7 @@ nav.pagination-nav {
 }
 
 .results-wrapper {
+  min-height:500px;
   .navigation-item {
     padding-left:0;
     padding-right:0;
@@ -196,4 +225,144 @@ nav.pagination-nav {
     color:$lightblue;
   }
 
+}
+
+/*****LOADER*****/
+.lds-roller {
+  display: inline-block;
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  top:50%;
+  left:0;
+  right:0;
+  margin:auto;
+}
+.lds-roller div {
+  animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  transform-origin: 40px 40px;
+}
+.lds-roller div:after {
+  content: " ";
+  display: block;
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #fff;
+  margin: -4px 0 0 -4px;
+}
+.lds-roller div:nth-child(1) {
+  animation-delay: -0.036s;
+}
+.lds-roller div:nth-child(1):after {
+  top: 63px;
+  left: 63px;
+}
+.lds-roller div:nth-child(2) {
+  animation-delay: -0.072s;
+}
+.lds-roller div:nth-child(2):after {
+  top: 68px;
+  left: 56px;
+}
+.lds-roller div:nth-child(3) {
+  animation-delay: -0.108s;
+}
+.lds-roller div:nth-child(3):after {
+  top: 71px;
+  left: 48px;
+}
+.lds-roller div:nth-child(4) {
+  animation-delay: -0.144s;
+}
+.lds-roller div:nth-child(4):after {
+  top: 72px;
+  left: 40px;
+}
+.lds-roller div:nth-child(5) {
+  animation-delay: -0.18s;
+}
+.lds-roller div:nth-child(5):after {
+  top: 71px;
+  left: 32px;
+}
+.lds-roller div:nth-child(6) {
+  animation-delay: -0.216s;
+}
+.lds-roller div:nth-child(6):after {
+  top: 68px;
+  left: 24px;
+}
+.lds-roller div:nth-child(7) {
+  animation-delay: -0.252s;
+}
+.lds-roller div:nth-child(7):after {
+  top: 63px;
+  left: 17px;
+}
+.lds-roller div:nth-child(8) {
+  animation-delay: -0.288s;
+}
+.lds-roller div:nth-child(8):after {
+  top: 56px;
+  left: 12px;
+}
+@keyframes lds-roller {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+.footer {
+  padding:40px 0px;
+  color:white;
+  .footer-icons {
+    svg {
+      font-size: 25px;
+      color:white;
+      margin-left:5px;
+      margin-right:5px;
+    }
+  }
+}
+
+@media(max-width:768px) {
+  .menu-home {
+    width:100%;
+    display:block;
+    margin-bottom:10px;
+    text-align: center;
+  }
+  .menu-search {
+    width:100%;
+    display:block;
+    margin-bottom:10px;
+    text-align: center !important;
+  }
+
+  .cook-list {
+    list-style-type: none;
+    columns: 1;
+    -webkit-columns: 1;
+    -moz-columns: 1;
+  }
+}
+
+
+@media (max-width:588px) {
+  .row {
+    margin-left:0;
+    margin-right:0;
+  }
+}
+
+@media (max-width:440px) {
+  .btn-search {
+    width:80%;
+  }
 }

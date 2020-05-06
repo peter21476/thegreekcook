@@ -3,6 +3,7 @@ import Recipe from './recipe';
 import Pagination from './pagination';
 import {Link} from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
+import {Animated} from "react-animated-css";
 
 function RecipesResults( {match} ) {
 
@@ -41,7 +42,9 @@ function RecipesResults( {match} ) {
         const response = await fetch(url);
         const data = await response.json();
         setRecipes(data.results);
+        setTimeout(function() {
         setLoading(false);
+        }, 2000);
     }
 
     function getValue() {
@@ -59,21 +62,22 @@ function RecipesResults( {match} ) {
     return(
     <div className="container results-wrapper">
         <div className="row navigation-item">
-            <div className="col-md-6">
+            <div className="col-lg-6 col-md-2 menu-home">
                 <nav>
                     <Link to="/"><button className="btn btn-menu" href="#">Home</button></Link>
                 </nav>
             </div>
-            <div className="col-md-6 text-right">
-            <input type="text" id="search-box" onChange={getValue}/>
+            <div className="col-lg-6 col-md-10 text-right menu-search">
+            <input placeholder="Add ingredients..." type="text" id="search-box" onChange={getValue}/>
             <button className="btn btn-search-res" onClick={refreshPage}>Search</button>
             </div>
         </div>
     
-        {loading ? <div>loading...</div> :
-    
-    <div className="row row-eq-height-xs">
-        
+        {loading ? 
+            <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+             :
+            <Animated animationIn="fadeIn" animationOut="fadeOut" isVisible={true}>
+        <div className="row row-eq-height-xs">
         {currentPosts.map(recipe => (<Recipe
             title={recipe.title}
             image={baseUrl + recipe.image}
@@ -81,13 +85,13 @@ function RecipesResults( {match} ) {
             servings={recipe.servings}
             key={recipe.id}
             recipeId={recipe.id}/>))}
-
-        <Pagination
+    </div>
+    <Pagination
             postsPerPage={postsPerPage}
             totalPosts={recipes.length}
             paginate={paginate}/>
-    </div>
-}
+    </Animated>
+    }
     </div>
     );
 }
