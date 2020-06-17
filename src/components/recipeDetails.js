@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChartPie } from "@fortawesome/free-solid-svg-icons";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
 import {Link} from 'react-router-dom';
+import {Helmet} from 'react-helmet';
 
 function RecipeDetails({match}) {
 
@@ -12,6 +13,7 @@ function RecipeDetails({match}) {
 
     useEffect(() => {
         callItemApi();
+        window.scrollTo(0, 0);
     }, []);
 
     const APP_KEY = "b84bdb70ee5a4becb4f63624084e355d";
@@ -29,6 +31,7 @@ function RecipeDetails({match}) {
         const url = `https://api.spoonacular.com/recipes/${match.params.id}/information?includeNutrition=false&apiKey=${APP_KEY}`;
         const response = await fetch(url);
         const data = await response.json();
+        data.summary = data.summary.replace(/<\/?a[^>]*>/g, "");
         setRecipeItem(data);
         setIngedients(data.extendedIngredients);
 
@@ -42,10 +45,16 @@ function RecipeDetails({match}) {
         } else {
             setInstructions(data.analyzedInstructions[0].steps);
         }
+
     }
+
 
     return (
         <div className="recipe-details-wrapper">
+        <Helmet>
+            <title>Zorbas' Kitchen | Your Recipe</title>
+            <meta name="description" content="Zorbas' Kitchen - Your Recipe" />
+        </Helmet>
             <div className="container navigation-item">
             <div className="row">
                     <div className="col-md-12">

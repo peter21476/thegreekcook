@@ -3,8 +3,6 @@ import {Link} from 'react-router-dom';
 
 function recipeModel({title, image, minutes, servings, recipeId}) {
 
-
-
     return (
         <div className="col-md-4 recipe-column">
 

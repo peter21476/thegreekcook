@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import Recipe from './recipe';
+import {Helmet} from 'react-helmet';
+import ImagePlaceholder from '../img/recipe-placeholder.jpg';
 
 function Home() {
 
@@ -21,8 +23,6 @@ function Home() {
         const response = await fetch(url);
         const data = await response.json();
         setSuggestedDish(data.recipes);
-        console.log(data.recipes);
-
     }
 
     function getValue() {
@@ -31,14 +31,29 @@ function Home() {
             .value;
         setSearchValue(getSearchVal);
     }
+
+    let createLink = `/results/${searchValue}`;
+
+
+    function handleKeyDown(e) {
+        if (e.key === 'Enter') {
+            let getButton = document.querySelector('.btn-search');
+            getButton.click();
+          }
+    }
+
     return (
         <div className="main-wrapper">
+        <Helmet>
+            <title>Zorbas' Kitchen | Home Page</title>
+            <meta name="description" content="Welcome to Zorbas' Kitchen!" />
+        </Helmet>
             <div className="container">
                 <div className="row">
                     <div className="col-md-12">
                         <div className="search-wrapper">
-                            <input placeholder="Add one more ingredients..." type="text" id="search-box" onChange={getValue}/>
-                            <Link to={`/results/${searchValue}`}>
+                            <input placeholder="Add one more ingredients..." type="text" id="search-box" onKeyDown={handleKeyDown} onChange={getValue}/>
+                            <Link to={createLink}>
                                 <button className="btn btn-search">Search</button>
                             </Link>
                         </div>
@@ -52,7 +67,7 @@ function Home() {
                 <div className="row row-eq-height-xs justify-content-center">
                     {suggestedDish.map(recipe => (<Recipe
                         title={recipe.title}
-                        image={recipe.image}
+                        image={recipe.image ? recipe.image : ImagePlaceholder }
                         minutes={recipe.readyInMinutes}
                         servings={recipe.servings}
                         key={recipe.id}

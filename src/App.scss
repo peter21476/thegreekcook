@@ -107,6 +107,7 @@ nav.pagination-nav {
 
 ul.pagination {
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .recipe-details {
@@ -233,7 +234,7 @@ ul.pagination {
   position: absolute;
   width: 80px;
   height: 80px;
-  top:50%;
+  top:60%;
   left:0;
   right:0;
   margin:auto;
@@ -351,6 +352,24 @@ ul.pagination {
     -webkit-columns: 1;
     -moz-columns: 1;
   }
+
+
+  .btn-menu {
+    margin-top:20px;
+    margin-bottom:20px;
+  }
+
+  .btn-menu, .btn-search-res {
+    width:100%;
+    margin-left:0;
+    margin-right:0;
+  }
+
+  #search-box {
+    width:100%;
+    border: 0;
+    padding-left: 5px;
+  }
 }
 
 
@@ -365,4 +384,15 @@ ul.pagination {
   .btn-search {
     width:80%;
   }
+}
+
+.error-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    margin-top: 50px;
+    font-size:20px;
+    color:white;
 }
