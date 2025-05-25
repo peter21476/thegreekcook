@@ -1,11 +1,10 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 
-function recipeModel({title, image, minutes, servings, recipeId}) {
+function recipeModel({title, image, minutes, servings, recipeId, isHomePage}) {
 
     return (
-        <div className="col-md-4 recipe-column">
-
+        <div className={`${!isHomePage ? 'col-md-4' : ''} recipe-column`}>
             <div className="recipe-wrapper">
                 <div
                     className="recipe-image"
@@ -19,7 +18,7 @@ function recipeModel({title, image, minutes, servings, recipeId}) {
             Servings: {servings}</p>
                 </div>
                 <div className="button-link">
-                        <Link to={`/result-item/${recipeId}`}><button className="btn btn-item">View Recipe</button></Link>
+                        <Link to={`/result-item/${recipeId}?page=${window.location.pathname.includes('/results/') ? new URLSearchParams(window.location.search).get('page') || 1 : 1}`}><button className="btn btn-item">View Recipe</button></Link>
                 </div>
             </div>
         </div>
