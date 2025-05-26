@@ -34,10 +34,10 @@
   },
   "scripts": {
     "start": "cd backend && npm install && npm start",
-    "build": "craco build",
+    "build": "react-scripts build",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "heroku-postbuild": "cd backend && npm install"
+    "heroku-postbuild": "npm run build && cd backend && npm install"
   },
   "eslintConfig": {
     "extends": [
