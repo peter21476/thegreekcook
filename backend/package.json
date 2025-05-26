@@ -3,9 +3,13 @@
   "version": "1.0.0",
   "description": "Backend for The Greek Cook recipe application",
   "main": "src/index.js",
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "heroku-postbuild": "npm install"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

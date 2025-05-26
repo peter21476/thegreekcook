@@ -1,6 +1,9 @@
 {
   "name": "thegreekcook",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "engines": {
+    "node": "18.x"
+  },
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
@@ -30,10 +33,11 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "craco start",
+    "start": "cd backend && npm install && npm start",
     "build": "craco build",
     "test": "craco test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "heroku-postbuild": "cd backend && npm install"
   },
   "eslintConfig": {
     "extends": [
