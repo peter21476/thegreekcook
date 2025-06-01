@@ -2,6 +2,7 @@ const express = require('express');
 const { body, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const { sendWelcomeEmail } = require('../utils/emailService');
 
 const router = express.Router();
 
@@ -36,6 +37,14 @@ router.post('/register', [
     const user = new User({ username, email, password });
     await user.save();
     console.log('User registered successfully:', username);
+
+    // Send welcome email
+    try {
+      await sendWelcomeEmail(email, username);
+    } catch (emailError) {
+      console.error('Failed to send welcome email:', emailError);
+      // Don't fail the registration if email fails
+    }
 
     res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
