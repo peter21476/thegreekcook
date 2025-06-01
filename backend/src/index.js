@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
-const healthRoutes = require('./routes/health');
 
 const app = express();
 
@@ -28,7 +27,6 @@ mongoose.connect(process.env.MONGODB_URI, {
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
-app.use('/', healthRoutes);
 
 // Serve static files from the React app
 const path = require('path');
