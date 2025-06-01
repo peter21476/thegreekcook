@@ -3,6 +3,8 @@ import Header from './components/header';
 import './App.scss';
 import 'react-animated-css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import RecipeDetails from './components/recipeDetails';
 import Home from './components/home';
 import Results from './components/results';
@@ -29,6 +31,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
         </Routes>
         <Footer />
+        <ToastContainer />
       </Router>
     </div>
   );

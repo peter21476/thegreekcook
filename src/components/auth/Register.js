@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './Auth.scss';
 import { API_CONFIG } from '../../config';
 
@@ -51,6 +53,14 @@ const Register = () => {
 
       if (response.ok) {
         setSuccess(true);
+        toast.success('Registration successful! Welcome to Zorba\'s Kitchen!', {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
         // Wait for 2 seconds to show the success message before redirecting
         setTimeout(() => {
           navigate('/login');
@@ -63,10 +73,26 @@ const Register = () => {
         } else {
           setError(data.message || 'Registration failed');
         }
+        toast.error('Registration failed. Please try again.', {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
       }
     } catch (err) {
       console.error('Registration error:', err);
       setError('Network error. Please check your connection and try again.');
+      toast.error('Network error. Please check your connection and try again.', {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     } finally {
       setLoading(false);
     }
