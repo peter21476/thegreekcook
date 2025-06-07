@@ -15,7 +15,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/react": "^18.3.22",
-    "bootstrap": "^4.4.1",
+    "bootstrap": "^5.0.0",
     "jquery": "^3.7.1",
     "popper.js": "^1.16.1",
     "postcss-selector-parser": "^6.1.2",
