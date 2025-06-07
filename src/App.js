@@ -22,14 +22,16 @@ function App() {
     <div className="main-wrapper">
       <Router>
         <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/results/:value" element={<Results />} />
-          <Route path="/result-item/:id" element={<RecipeDetails />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/profile" element={<Profile />} />
-        </Routes>
+        <main>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/results/:value" element={<Results />} />
+            <Route path="/result-item/:id" element={<RecipeDetails />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/profile" element={<Profile />} />
+          </Routes>
+        </main>
         <Footer />
         <ToastContainer />
       </Router>

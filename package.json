@@ -35,6 +35,8 @@
   },
   "scripts": {
     "start": "cd backend && npm install && npm start",
+    "frontend": "react-scripts start",
+    "dev": "concurrently \"npm run start\" \"npm run frontend\"",
     "build": "react-scripts build",
     "test": "craco test",
     "eject": "react-scripts eject",
@@ -61,6 +63,7 @@
   "devDependencies": {
     "@craco/craco": "^7.1.0",
     "buffer": "^6.0.3",
+    "concurrently": "^8.2.2",
     "sass": "^1.69.0"
   }
 }

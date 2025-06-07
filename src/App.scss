@@ -658,3 +658,18 @@ h1, h2, h3, h4, h5, h6 {
   padding-top: 4rem;
   padding-bottom: 1.5rem;
 }
+
+.main-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+// Add this new style for the main content area
+main {
+  flex: 1;
+  padding-top: 2rem;
+  position: relative;
+  z-index: 1;
+}
