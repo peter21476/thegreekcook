@@ -35,7 +35,7 @@
   },
   "scripts": {
     "start": "cd backend && npm install && npm start",
-    "frontend": "react-scripts start",
+    "frontend": "NODE_OPTIONS='--max-old-space-size=4096' react-scripts start",
     "dev": "concurrently \"npm run start\" \"npm run frontend\"",
     "build": "react-scripts build",
     "test": "craco test",

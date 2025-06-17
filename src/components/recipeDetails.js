@@ -19,6 +19,7 @@ function RecipeDetails() {
     const [error, setError] = useState(null);
     const page = new URLSearchParams(window.location.search).get('page') || 1;
     const searchValue = localStorage.getItem('lastSearchValue') || '';
+    const fromFavorites = new URLSearchParams(window.location.search).get('from') === 'favorites';
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -88,8 +89,10 @@ function RecipeDetails() {
             }
             const data = await response.json();
             
-            // Clean up summary HTML
-            data.summary = data.summary.replace(/<\/?a[^>]*>/g, "");
+            // Clean up summary HTML and add target="_blank" to all links
+            if (data.summary) {
+                data.summary = data.summary.replace(/<a\s/g, '<a target="_blank" rel="noopener noreferrer" ');
+            }
             
             // Set recipe data
             setRecipe(data);
@@ -146,7 +149,12 @@ function RecipeDetails() {
                 <div className="row">
                     <div className="col-md-12">
                         <nav>
-                            <button onClick={() => navigate(`/results/${searchValue}?page=${page}`)} className="btn btn-menu">Back to Results</button>
+                            <button 
+                                onClick={() => fromFavorites ? navigate('/profile') : navigate(`/results/${searchValue}?page=${page}`)} 
+                                className="btn btn-menu"
+                            >
+                                {fromFavorites ? 'Back to Favorites' : 'Back to Results'}
+                            </button>
                             <Link to="/"><button className="btn btn-menu" href="#">Home</button></Link>
                         </nav>
                     </div>
@@ -204,6 +212,11 @@ function RecipeDetails() {
                                 </li>
                             ))}
                         </ul>
+                        {recipe.sourceUrl && (
+                            <p className="source-credit">
+                                <small>Recipe source: <a href={recipe.sourceUrl} target="_blank" rel="noopener noreferrer">{recipe.sourceName}</a></small>
+                            </p>
+                        )}
                     </div>
                 </div>
             </div>

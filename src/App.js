@@ -12,6 +12,8 @@ import Footer from './components/footer';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import Profile from './components/auth/Profile';
+import SubmitRecipe from './components/SubmitRecipe';
+import RecipeApproval from './components/admin/RecipeApproval';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 
@@ -30,6 +32,8 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/submit-recipe" element={<SubmitRecipe />} />
+            <Route path="/admin/recipes" element={<RecipeApproval />} />
           </Routes>
         </main>
         <Footer />

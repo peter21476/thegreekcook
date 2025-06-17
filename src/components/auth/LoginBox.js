@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './Auth.scss';
 import { API_CONFIG } from '../../config';
@@ -11,6 +11,15 @@ const LoginBox = () => {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    // Check if user is logged in
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
 
   const handleChange = (e) => {
     setFormData({
@@ -39,6 +48,7 @@ const LoginBox = () => {
       if (response.ok) {
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
+        setUser(data.user);
         navigate('/profile');
       } else {
         setError(data.message || 'Login failed');
@@ -50,6 +60,29 @@ const LoginBox = () => {
       setLoading(false);
     }
   };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setUser(null);
+    window.dispatchEvent(new Event('logout'));
+    navigate('/');
+  };
+
+  if (user) {
+    return (
+      <div className="login-box">
+        <h3>Welcome, {user.username}!</h3>
+        <div className="user-info">
+          <p><strong>Email:</strong> {user.email}</p>
+        </div>
+        <div className="user-actions">
+          <Link to="/profile" className="auth-button profile-btn">View Profile</Link>
+          <button onClick={handleLogout} className="auth-button logout-btn">Logout</button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="login-box">

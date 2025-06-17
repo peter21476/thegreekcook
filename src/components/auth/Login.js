@@ -44,6 +44,8 @@ const Login = () => {
         localStorage.setItem('token', data.token);
         // Store user data if needed
         localStorage.setItem('user', JSON.stringify(data.user));
+        // Dispatch login event
+        window.dispatchEvent(new Event('login'));
         navigate('/profile');
       } else {
         setError(data.message || 'Login failed');

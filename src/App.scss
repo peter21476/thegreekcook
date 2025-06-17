@@ -673,3 +673,328 @@ main {
   position: relative;
   z-index: 1;
 }
+
+.submit-recipe-container {
+  padding: 2rem 0;
+
+  h2 {
+    color: $primary;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .recipe-form {
+    max-width: 800px;
+    margin: 0 auto;
+    background: $white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+
+    .form-group {
+      margin-bottom: 1.5rem;
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: $text;
+        font-weight: 600;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.2s ease-in-out;
+
+        &:focus {
+          border-color: $primary;
+          box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+          outline: none;
+        }
+      }
+    }
+
+    .ingredient-row, .instruction-row {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      align-items: flex-start;
+
+      .form-control {
+        flex: 1;
+      }
+
+      .btn-danger {
+        padding: 0.75rem 1rem;
+        background-color: #ef4444;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+
+        &:hover:not(:disabled) {
+          background-color: #dc2626;
+        }
+
+        &:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+      }
+    }
+
+    .instruction-row {
+      .step-number {
+        font-weight: 600;
+        color: $primary;
+        padding-top: 0.75rem;
+      }
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 1rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+
+      &.btn-primary {
+        background-color: $primary;
+        color: white;
+
+        &:hover:not(:disabled) {
+          background-color: darken($primary, 10%);
+          transform: translateY(-1px);
+        }
+
+        &:disabled {
+          opacity: 0.7;
+          cursor: not-allowed;
+        }
+      }
+
+      &.btn-secondary {
+        background-color: #e2e8f0;
+        color: $text;
+        margin-top: 0.5rem;
+
+        &:hover {
+          background-color: #cbd5e1;
+        }
+      }
+    }
+  }
+}
+
+.recipe-approval-container {
+  padding: 2rem 0;
+
+  h2 {
+    color: $primary;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .no-recipes {
+    text-align: center;
+    color: $text-light;
+    font-size: 1.1rem;
+  }
+
+  .recipes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 1rem;
+  }
+
+  .recipe-card {
+    background: $white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+
+    &:hover {
+      transform: translateY(-4px);
+    }
+
+    .recipe-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .recipe-content {
+      padding: 1.5rem;
+
+      h3 {
+        color: $primary;
+        margin-bottom: 0.5rem;
+      }
+
+      .submitted-by {
+        color: $text-light;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+      }
+
+      .description {
+        margin-bottom: 1rem;
+        line-height: 1.6;
+      }
+
+      .recipe-details {
+        background: #f8fafc;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+
+        p {
+          margin: 0.5rem 0;
+        }
+      }
+
+      .ingredients, .instructions {
+        margin-bottom: 1rem;
+
+        h4 {
+          color: $primary;
+          margin-bottom: 0.5rem;
+        }
+
+        ul, ol {
+          padding-left: 1.5rem;
+          margin: 0;
+
+          li {
+            margin-bottom: 0.5rem;
+          }
+        }
+      }
+
+      .approval-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+
+        .btn {
+          flex: 1;
+          padding: 0.75rem;
+          border: none;
+          border-radius: 8px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s ease-in-out;
+
+          &.btn-success {
+            background-color: #10b981;
+            color: white;
+
+            &:hover {
+              background-color: #059669;
+            }
+          }
+
+          &.btn-danger {
+            background-color: #ef4444;
+            color: white;
+
+            &:hover {
+              background-color: #dc2626;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .rejection-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+
+    .modal-content {
+      background: $white;
+      padding: 2rem;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 500px;
+
+      h3 {
+        color: $primary;
+        margin-bottom: 1rem;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        margin: 1rem 0;
+        font-size: 1rem;
+        resize: vertical;
+
+        &:focus {
+          border-color: $primary;
+          box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+          outline: none;
+        }
+      }
+
+      .modal-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+
+        .btn {
+          flex: 1;
+          padding: 0.75rem;
+          border: none;
+          border-radius: 8px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s ease-in-out;
+
+          &.btn-danger {
+            background-color: #ef4444;
+            color: white;
+
+            &:hover {
+              background-color: #dc2626;
+            }
+          }
+
+          &.btn-secondary {
+            background-color: #e2e8f0;
+            color: $text;
+
+            &:hover {
+              background-color: #cbd5e1;
+            }
+          }
+        }
+      }
+    }
+  }
+}
