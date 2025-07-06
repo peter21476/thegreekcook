@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import ReactHtmlParser from 'react-html-parser';
+import parse from 'html-react-parser';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChartPie, faClock, faHeart, faHeartBroken } from "@fortawesome/free-solid-svg-icons";
@@ -228,7 +228,7 @@ function RecipeDetails() {
                         <img className="img-fluid" src={recipe.image} alt={recipe.title}/>
                     </div>
                     <div className="col-md-6 text-center">
-                        <p>{ReactHtmlParser(recipe.summary)}</p>
+                        <p>{parse(recipe.summary)}</p>
                     </div>
                 </div>
                 <div className="row ingredients-row">
