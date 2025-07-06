@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import './Auth.scss';
@@ -14,11 +14,7 @@ const Profile = () => {
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('favorites'); // 'favorites' or 'submitted'
 
-  useEffect(() => {
-    fetchUserData();
-  }, []);
-
-  const fetchUserData = async () => {
+  const fetchUserData = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
@@ -72,12 +68,39 @@ const Profile = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [navigate]);
+
+  useEffect(() => {
+    fetchUserData();
+  }, [fetchUserData]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     navigate('/login');
+  };
+
+  const removeFavorite = async (recipeId) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${API_CONFIG.BACKEND_URL}/api/user/favorites/${recipeId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to remove from favorites');
+      }
+
+      // Remove from local state
+      setFavorites(favorites.filter(fav => fav.recipeId !== recipeId));
+      toast.success('Recipe removed from favorites');
+    } catch (error) {
+      toast.error('Error removing recipe from favorites');
+      console.error('Error removing favorite:', error);
+    }
   };
 
   if (loading) {
@@ -153,6 +176,13 @@ const Profile = () => {
                 <div className="favorites-grid">
                   {favorites.map((recipe) => (
                     <div key={recipe.id} className="favorite-recipe">
+                      <button
+                        onClick={() => removeFavorite(recipe.recipeId)}
+                        className="remove-favorite-x"
+                        aria-label="Remove from favorites"
+                      >
+                        ×
+                      </button>
                       <img src={recipe.image} alt={recipe.title} />
                       <h4>{recipe.title}</h4>
                       <button
@@ -186,6 +216,20 @@ const Profile = () => {
                             Reason: {recipe.rejectionReason}
                           </p>
                         )}
+                        <div className="recipe-actions">
+                          <button
+                            onClick={() => navigate(`/result-item/${recipe._id}?from=profile`)}
+                            className="btn btn-primary"
+                          >
+                            View Recipe
+                          </button>
+                          <button
+                            onClick={() => navigate(`/edit-recipe/${recipe._id}`)}
+                            className="btn btn-secondary"
+                          >
+                            Edit Recipe
+                          </button>
+                        </div>
                       </div>
                     </div>
                   ))}

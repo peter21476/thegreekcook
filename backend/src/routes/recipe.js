@@ -131,4 +131,90 @@ router.get('/my-recipes', auth, async (req, res) => {
   }
 });
 
+// Search approved recipes by query
+router.get('/search', async (req, res) => {
+  try {
+    const { query } = req.query;
+    
+    if (!query) {
+      return res.status(400).json({ message: 'Query parameter is required' });
+    }
+
+    const recipes = await Recipe.find({
+      $or: [
+        { title: { $regex: query, $options: 'i' } },
+        { description: { $regex: query, $options: 'i' } },
+        { 'ingredients.name': { $regex: query, $options: 'i' } }
+      ]
+    })
+    .populate('submittedBy', 'username')
+    .sort({ createdAt: -1 });
+
+    res.json(recipes);
+  } catch (error) {
+    res.status(500).json({ message: 'Error searching recipes' });
+  }
+});
+
+// Get a single recipe by ID
+router.get('/:id', async (req, res) => {
+  try {
+    const recipe = await Recipe.findById(req.params.id)
+      .populate('submittedBy', 'username');
+    
+    if (!recipe) {
+      return res.status(404).json({ message: 'Recipe not found' });
+    }
+    
+    res.json(recipe);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching recipe' });
+  }
+});
+
+// Update a recipe (only by the original submitter)
+router.put('/:id', [
+  auth,
+  [
+    check('title', 'Title is required').not().isEmpty(),
+    check('description', 'Description is required').not().isEmpty(),
+    check('ingredients', 'Ingredients are required').isArray({ min: 1 }),
+    check('instructions', 'Instructions are required').isArray({ min: 1 }),
+    check('servings', 'Servings is required').isNumeric(),
+    check('prepTime', 'Prep time is required').isNumeric(),
+    check('cookTime', 'Cook time is required').isNumeric(),
+    check('image', 'Image URL is required').not().isEmpty()
+  ]
+], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  try {
+    const recipe = await Recipe.findById(req.params.id);
+    
+    if (!recipe) {
+      return res.status(404).json({ message: 'Recipe not found' });
+    }
+
+    // Check if the user is the original submitter or an admin
+    const user = await User.findById(req.user._id);
+    if (recipe.submittedBy.toString() !== req.user._id.toString() && !user.isAdmin) {
+      return res.status(403).json({ message: 'You can only edit your own recipes' });
+    }
+
+    // Update the recipe
+    const updatedRecipe = await Recipe.findByIdAndUpdate(
+      req.params.id,
+      { ...req.body },
+      { new: true }
+    ).populate('submittedBy', 'username');
+
+    res.json(updatedRecipe);
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating recipe' });
+  }
+});
+
 module.exports = router; 

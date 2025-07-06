@@ -26,7 +26,6 @@ const Login = () => {
     setLoading(true);
 
     try {
-      console.log('Attempting login with:', { email: formData.email });
       const response = await fetch(`${API_CONFIG.BACKEND_URL}/api/auth/login`, {
         method: 'POST',
         headers: {
@@ -35,9 +34,7 @@ const Login = () => {
         body: JSON.stringify(formData),
       });
 
-      console.log('Login response status:', response.status);
       const data = await response.json();
-      console.log('Login response data:', data);
 
       if (response.ok) {
         // Store the token in localStorage

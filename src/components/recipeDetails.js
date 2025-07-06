@@ -21,16 +21,6 @@ function RecipeDetails() {
     const searchValue = localStorage.getItem('lastSearchValue') || '';
     const fromFavorites = new URLSearchParams(window.location.search).get('from') === 'favorites';
 
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        setIsLoggedIn(!!token);
-        if (token) {
-            checkIfFavorite();
-        }
-        callApi();
-        window.scrollTo(0, 0);
-    }, []);
-
     const checkIfFavorite = async () => {
         try {
             const response = await fetch(`${API_CONFIG.BACKEND_URL}/api/user/favorites/check/${id}`, {
@@ -82,32 +72,65 @@ function RecipeDetails() {
     const callApi = async() => {
         try {
             setLoading(true);
-            const url = `${API_CONFIG.API_BASE_URL}/${id}/information?apiKey=${API_CONFIG.APP_KEY}`;
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = await response.json();
             
-            // Clean up summary HTML and add target="_blank" to all links
-            if (data.summary) {
-                data.summary = data.summary.replace(/<a\s/g, '<a target="_blank" rel="noopener noreferrer" ');
-            }
+            // First try to fetch from user recipes
+            const userRecipeResponse = await fetch(`${API_CONFIG.BACKEND_URL}/api/recipes/${id}`);
             
-            // Set recipe data
-            setRecipe(data);
-            
-            // Set ingredients
-            setIngredients(data.extendedIngredients || []);
-            
-            // Set instructions
-            if (data.analyzedInstructions && data.analyzedInstructions[0]) {
-                setInstructions(data.analyzedInstructions[0].steps || []);
+            if (userRecipeResponse.ok) {
+                // This is a user recipe
+                const userRecipe = await userRecipeResponse.json();
+                
+                // Transform user recipe to match API format
+                const transformedRecipe = {
+                    ...userRecipe,
+                    readyInMinutes: userRecipe.prepTime + userRecipe.cookTime,
+                    summary: userRecipe.description,
+                    extendedIngredients: userRecipe.ingredients.map((ingredient, index) => ({
+                        id: index,
+                        original: `${ingredient.amount} ${ingredient.name}`
+                    })),
+                    analyzedInstructions: [{
+                        steps: userRecipe.instructions.map((instruction, index) => ({
+                            number: instruction.step,
+                            step: instruction.description
+                        }))
+                    }],
+                    isUserRecipe: true,
+                    submittedBy: userRecipe.submittedBy?.username || 'User'
+                };
+                
+                setRecipe(transformedRecipe);
+                setIngredients(transformedRecipe.extendedIngredients);
+                setInstructions(transformedRecipe.analyzedInstructions[0].steps);
             } else {
-                setInstructions([{
-                    number: 1,
-                    step: "Instructions are not available for this recipe."
-                }]);
+                // This is an API recipe
+                const url = `${API_CONFIG.API_BASE_URL}/${id}/information?apiKey=${API_CONFIG.APP_KEY}`;
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                
+                // Clean up summary HTML and add target="_blank" to all links
+                if (data.summary) {
+                    data.summary = data.summary.replace(/<a\s/g, '<a target="_blank" rel="noopener noreferrer" ');
+                }
+                
+                // Set recipe data
+                setRecipe(data);
+                
+                // Set ingredients
+                setIngredients(data.extendedIngredients || []);
+                
+                // Set instructions
+                if (data.analyzedInstructions && data.analyzedInstructions[0]) {
+                    setInstructions(data.analyzedInstructions[0].steps || []);
+                } else {
+                    setInstructions([{
+                        number: 1,
+                        step: "Instructions are not available for this recipe."
+                    }]);
+                }
             }
         } catch (error) {
             console.error('Error fetching recipe details:', error);
@@ -120,7 +143,17 @@ function RecipeDetails() {
         } finally {
             setLoading(false);
         }
-    }
+    };
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        setIsLoggedIn(!!token);
+        if (token) {
+            checkIfFavorite();
+        }
+        callApi();
+        window.scrollTo(0, 0);
+    }, [id]);
 
     if (loading) {
         return <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>;
@@ -163,7 +196,15 @@ function RecipeDetails() {
             <div className="container recipe-details">
                 <div className="row">
                     <div className="col-md-12 intro-wrapper">
-                        <h3>{recipe.title}</h3>
+                        <div className="recipe-header">
+                            <h3>{recipe.title}</h3>
+                            {recipe.isUserRecipe && (
+                                <div className="user-recipe-badge-details">
+                                    <span className="badge">User Recipe</span>
+                                    {recipe.submittedBy && <span className="submitted-by">by {recipe.submittedBy}</span>}
+                                </div>
+                            )}
+                        </div>
                         <p>
                             <FontAwesomeIcon icon={faChartPie} /> Serving: {recipe.servings} | 
                             <FontAwesomeIcon icon={faClock} /> Ready in {recipe.readyInMinutes} min.

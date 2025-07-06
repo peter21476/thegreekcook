@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { API_CONFIG } from '../config';
 import { Helmet } from 'react-helmet';
 import ImageUpload from './ImageUpload';
 
-function SubmitRecipe() {
+function EditRecipe() {
   const navigate = useNavigate();
+  const { id } = useParams();
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -18,6 +20,52 @@ function SubmitRecipe() {
     cookTime: '',
     image: ''
   });
+
+  useEffect(() => {
+    fetchRecipe();
+  }, [id]);
+
+  const fetchRecipe = async () => {
+    try {
+      const response = await fetch(`${API_CONFIG.BACKEND_URL}/api/recipes/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch recipe');
+      }
+
+      const recipe = await response.json();
+      
+      // Check if the current user is the recipe owner or an admin
+      const currentUser = JSON.parse(localStorage.getItem('user'));
+      const submittedById = typeof recipe.submittedBy === 'object' ? recipe.submittedBy._id : recipe.submittedBy;
+      
+      if (submittedById !== currentUser._id && !currentUser.isAdmin) {
+        toast.error('You can only edit your own recipes');
+        navigate('/profile');
+        return;
+      }
+
+      setFormData({
+        title: recipe.title,
+        description: recipe.description,
+        ingredients: recipe.ingredients,
+        instructions: recipe.instructions,
+        servings: recipe.servings,
+        prepTime: recipe.prepTime,
+        cookTime: recipe.cookTime,
+        image: recipe.image
+      });
+    } catch (error) {
+      toast.error('Error fetching recipe');
+      navigate('/profile');
+    } finally {
+      setInitialLoading(false);
+    }
+  };
 
   const handleChange = (e) => {
     setFormData({
@@ -83,8 +131,8 @@ function SubmitRecipe() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_CONFIG.BACKEND_URL}/api/recipes/submit`, {
-        method: 'POST',
+      const response = await fetch(`${API_CONFIG.BACKEND_URL}/api/recipes/${id}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -93,28 +141,46 @@ function SubmitRecipe() {
       });
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to submit recipe');
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to update recipe');
       }
 
-      toast.success('Recipe submitted successfully! Waiting for admin approval.');
+      toast.success('Recipe updated successfully!');
       navigate('/profile');
     } catch (error) {
-      toast.error(error.message || 'Error submitting recipe');
+      toast.error(error.message);
     } finally {
       setLoading(false);
     }
   };
 
+  if (initialLoading) {
+    return (
+      <div className="loading-container">
+        <div className="lds-roller">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <p className="loading-text">Loading recipe...</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="submit-recipe-container">
+    <div className="edit-recipe-container">
       <Helmet>
-        <title>Submit Recipe | Zorbas' Kitchen</title>
-        <meta name="description" content="Submit your own Greek recipe" />
+        <title>Edit Recipe | Zorbas' Kitchen</title>
+        <meta name="description" content="Edit your recipe" />
       </Helmet>
 
       <div className="container">
-        <h2>Submit Your Recipe</h2>
+        <h2>Edit Recipe</h2>
         <form onSubmit={handleSubmit} className="recipe-form">
           <div className="form-group">
             <label htmlFor="title">Recipe Title</label>
@@ -146,36 +212,26 @@ function SubmitRecipe() {
             <label>Ingredients</label>
             {formData.ingredients.map((ingredient, index) => (
               <div key={index} className="ingredient-row">
-                <div className="ingredient-inputs">
-                  <div className="input-group">
-                    <label htmlFor={`ingredient-name-${index}`}>Ingredient Name</label>
-                    <input
-                      type="text"
-                      id={`ingredient-name-${index}`}
-                      placeholder="e.g., Olive Oil"
-                      value={ingredient.name}
-                      onChange={(e) => handleIngredientChange(index, 'name', e.target.value)}
-                      required
-                      className="form-control"
-                    />
-                  </div>
-                  <div className="input-group">
-                    <label htmlFor={`ingredient-amount-${index}`}>Amount</label>
-                    <input
-                      type="text"
-                      id={`ingredient-amount-${index}`}
-                      placeholder="e.g., 2 tablespoons"
-                      value={ingredient.amount}
-                      onChange={(e) => handleIngredientChange(index, 'amount', e.target.value)}
-                      required
-                      className="form-control"
-                    />
-                  </div>
-                </div>
+                <input
+                  type="text"
+                  placeholder="Amount (e.g., 2 cups)"
+                  value={ingredient.amount}
+                  onChange={(e) => handleIngredientChange(index, 'amount', e.target.value)}
+                  required
+                  className="form-control ingredient-amount"
+                />
+                <input
+                  type="text"
+                  placeholder="Ingredient name"
+                  value={ingredient.name}
+                  onChange={(e) => handleIngredientChange(index, 'name', e.target.value)}
+                  required
+                  className="form-control ingredient-name"
+                />
                 <button
                   type="button"
                   onClick={() => removeIngredient(index)}
-                  className="btn btn-danger"
+                  className="btn btn-danger remove-btn"
                   disabled={formData.ingredients.length === 1}
                 >
                   Remove
@@ -193,17 +249,17 @@ function SubmitRecipe() {
               <div key={index} className="instruction-row">
                 <span className="step-number">{instruction.step}.</span>
                 <textarea
-                  placeholder="Step description"
+                  placeholder="Instruction description"
                   value={instruction.description}
                   onChange={(e) => handleInstructionChange(index, e.target.value)}
                   required
-                  className="form-control"
-                  rows="2"
+                  className="form-control instruction-text"
+                  rows="3"
                 />
                 <button
                   type="button"
                   onClick={() => removeInstruction(index)}
-                  className="btn btn-danger"
+                  className="btn btn-danger remove-btn"
                   disabled={formData.instructions.length === 1}
                 >
                   Remove
@@ -211,7 +267,7 @@ function SubmitRecipe() {
               </div>
             ))}
             <button type="button" onClick={addInstruction} className="btn btn-secondary">
-              Add Step
+              Add Instruction
             </button>
           </div>
 
@@ -267,13 +323,22 @@ function SubmitRecipe() {
             />
           </div>
 
-          <button type="submit" className="btn btn-primary" disabled={loading}>
-            {loading ? 'Submitting...' : 'Submit Recipe'}
-          </button>
+          <div className="form-actions">
+            <button type="submit" className="btn btn-primary" disabled={loading}>
+              {loading ? 'Updating...' : 'Update Recipe'}
+            </button>
+            <button 
+              type="button" 
+              onClick={() => navigate('/profile')} 
+              className="btn btn-secondary"
+            >
+              Cancel
+            </button>
+          </div>
         </form>
       </div>
     </div>
   );
 }
 
-export default SubmitRecipe; 
+export default EditRecipe; 

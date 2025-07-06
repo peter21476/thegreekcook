@@ -1,3 +1,8 @@
+$primary: #007bff;
+$white: #ffffff;
+$text: #333333;
+$text-light: #666666;
+
 .auth-container {
   max-width: 400px;
   margin: 4rem auto;
@@ -151,11 +156,12 @@
     margin-bottom: 2rem;
 
     .btn {
-      flex: 1;
-      padding: 0.75rem;
+      flex: 0 1 auto;
+      padding: 0.5rem 1rem;
       border: none;
-      border-radius: 8px;
+      border-radius: 6px;
       font-weight: 600;
+      font-size: 0.875rem;
       cursor: pointer;
       transition: all 0.2s ease-in-out;
 
@@ -188,11 +194,12 @@
     padding-bottom: 1rem;
 
     .tab-button {
-      padding: 0.75rem 1.5rem;
+      padding: 0.5rem 1rem;
       border: none;
       background: none;
       color: $text-light;
       font-weight: 600;
+      font-size: 0.875rem;
       cursor: pointer;
       transition: all 0.2s ease-in-out;
       position: relative;
@@ -229,6 +236,7 @@
     border-radius: 8px;
     overflow: hidden;
     transition: transform 0.2s;
+    position: relative;
 
     &:hover {
       transform: translateY(-4px);
@@ -245,6 +253,31 @@
       margin: 0;
       font-size: 1rem;
       color: $text;
+    }
+  }
+
+  .remove-favorite-x {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    background-color: rgba(220, 53, 69, 0.9);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease-in-out;
+    z-index: 10;
+
+    &:hover {
+      background-color: #dc3545;
+      transform: scale(1.1);
     }
   }
 
@@ -278,15 +311,53 @@
         background-color: #fee2e2;
         border-radius: 4px;
       }
+
+      .recipe-actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 0.75rem;
+
+        .btn {
+          flex: 1;
+          padding: 0.5rem 1rem;
+          font-size: 0.875rem;
+          border-radius: 6px;
+          border: none;
+          cursor: pointer;
+          transition: all 0.2s ease-in-out;
+          text-align: center;
+
+          &.btn-primary {
+            background-color: $primary;
+            color: white;
+
+            &:hover {
+              background-color: darken($primary, 10%);
+              transform: translateY(-1px);
+            }
+          }
+
+          &.btn-secondary {
+            background-color: #f59e0b;
+            color: white;
+
+            &:hover {
+              background-color: #d97706;
+              transform: translateY(-1px);
+            }
+          }
+        }
+      }
     }
   }
 
   .view-recipe-btn {
     width: 100%;
-    padding: 0.75rem;
+    padding: 0.5rem;
     background-color: $primary;
     color: white;
     border: none;
+    font-size: 0.875rem;
     cursor: pointer;
     transition: background-color 0.2s;
 
@@ -295,17 +366,19 @@
     }
   }
 
+
+
   .logout-button {
     background-color: #dc3545;
     color: white;
-    padding: 0.75rem;
+    padding: 0.5rem 1rem;
     border: none;
     border-radius: 4px;
-    font-size: 1rem;
+    font-size: 0.875rem;
     cursor: pointer;
     transition: background-color 0.2s;
     margin-top: 1rem;
-    width: 100%;
+    display: inline-block;
 
     &:hover {
       background-color: #c82333;

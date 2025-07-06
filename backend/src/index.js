@@ -5,6 +5,7 @@ const cors = require('cors');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const recipeRoutes = require('./routes/recipe');
+const uploadRoutes = require('./routes/upload');
 
 const app = express();
 
@@ -29,15 +30,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/recipes', recipeRoutes);
-
-// Serve static files from the React app
-const path = require('path');
-app.use(express.static(path.join(__dirname, '..', '..', 'build')));
-
-// The "catchall" handler: for any request that doesn't match above, send back React's index.html file.
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', '..', 'build', 'index.html'));
-});
+app.use('/api/upload', uploadRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

@@ -23,23 +23,40 @@ function Home() {
         try {
             setIsLoading(true);
             setError(null);
-            // Using the complex search endpoint with specific Greek cuisine parameters
-            const url = `${API_CONFIG.API_BASE_URL}/complexSearch?cuisine=greek&number=3&apiKey=${API_CONFIG.APP_KEY}&addRecipeInformation=true&instructionsRequired=true&fillIngredients=true`;
-            console.log('API Key:', API_CONFIG.APP_KEY); // Debug log
-            console.log('API URL:', url); // Debug log
             
-            const response = await fetch(url);
-            console.log('Response status:', response.status); // Debug log
+            // Fetch user recipes first
+            const userRecipesResponse = await fetch(`${API_CONFIG.BACKEND_URL}/api/recipes/approved`);
+            const userRecipes = userRecipesResponse.ok ? await userRecipesResponse.json() : [];
             
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error('API Error Response:', errorText); // Debug log
-                throw new Error(`HTTP error! status: ${response.status}`);
+            // Transform user recipes to match API format
+            const transformedUserRecipes = userRecipes.slice(0, 2).map(recipe => ({
+                ...recipe,
+                id: recipe._id,
+                readyInMinutes: recipe.prepTime + recipe.cookTime,
+                isUserRecipe: true,
+                submittedBy: recipe.submittedBy?.username || 'User'
+            }));
+            
+            // Fetch API recipes
+            const apiUrl = `${API_CONFIG.API_BASE_URL}/complexSearch?cuisine=greek&number=3&apiKey=${API_CONFIG.APP_KEY}&addRecipeInformation=true&instructionsRequired=true&fillIngredients=true`;
+            const apiResponse = await fetch(apiUrl);
+            
+            if (!apiResponse.ok) {
+                const errorText = await apiResponse.text();
+                console.error('API Error Response:', errorText);
+                throw new Error(`HTTP error! status: ${apiResponse.status}`);
             }
             
-            const data = await response.json();
-            console.log('API Response:', data); // Debug log
-            setSuggestedDish(data.results || []);
+            const apiData = await apiResponse.json();
+            const transformedApiRecipes = (apiData.results || []).map(recipe => ({
+                ...recipe,
+                isUserRecipe: false
+            }));
+            
+            // Combine recipes: user recipes first, then API recipes
+            const combinedRecipes = [...transformedUserRecipes, ...transformedApiRecipes];
+            
+            setSuggestedDish(combinedRecipes);
         } catch (err) {
             console.error('Error fetching suggested recipes:', err);
             setError('Failed to load suggested recipes. Please try again later.');
@@ -138,11 +155,13 @@ function Home() {
                                         <div key={recipe.id}>
                                             <Recipe
                                                 title={recipe.title}
-                                                image={recipe.image ? recipe.image : ImagePlaceholder}
+                                                image={recipe.isUserRecipe ? recipe.image : (recipe.image ? recipe.image : ImagePlaceholder)}
                                                 minutes={recipe.readyInMinutes}
                                                 servings={recipe.servings}
                                                 recipeId={recipe.id}
                                                 isHomePage={true}
+                                                isUserRecipe={recipe.isUserRecipe}
+                                                submittedBy={recipe.submittedBy}
                                             />
                                         </div>
                                     ))}
