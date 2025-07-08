@@ -3,5 +3,5 @@ export const API_CONFIG = {
     APP_KEY: process.env.REACT_APP_SPOONACULAR_API_KEY || "YOUR_SPOONACULAR_API_KEY",
     BASE_URL: "https://spoonacular.com/recipeImages/",
     API_BASE_URL: "https://api.spoonacular.com/recipes",
-    BACKEND_URL: 'http://localhost:5001'
+    BACKEND_URL: process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5001'
 }; 
