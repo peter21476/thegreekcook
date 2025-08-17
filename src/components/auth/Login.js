@@ -92,9 +92,14 @@ const Login = () => {
           {loading ? 'Logging in...' : 'Login'}
         </button>
       </form>
-      <p className="auth-link">
-        Don't have an account? <Link to="/register">Register here</Link>
-      </p>
+      <div className="auth-form-links">
+        <p>
+          <Link to="/forgot-password">Forgot Password?</Link>
+        </p>
+        <p>
+          Don't have an account? <Link to="/register">Register here</Link>
+        </p>
+      </div>
     </div>
   );
 };

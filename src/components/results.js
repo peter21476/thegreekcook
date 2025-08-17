@@ -43,7 +43,8 @@ function RecipesResults() {
                 id: recipe._id,
                 readyInMinutes: recipe.prepTime + recipe.cookTime,
                 isUserRecipe: true,
-                submittedBy: recipe.submittedBy // Keep the full object instead of just username
+                submittedBy: recipe.submittedBy, // Keep the full object instead of just username
+                likeCount: recipe.likeCount || 0
             }));
             
             // Debug logging
@@ -58,8 +59,37 @@ function RecipesResults() {
             // Transform API recipes to include isUserRecipe flag
             const transformedApiRecipes = (apiData.results || []).map(recipe => ({
                 ...recipe,
-                isUserRecipe: false
+                isUserRecipe: false,
+                likeCount: 0 // Will be updated below
             }));
+
+            // Get like counts for external recipes if user is logged in
+            const token = localStorage.getItem('token');
+            if (token && transformedApiRecipes.length > 0) {
+                try {
+                    const externalRecipeIds = transformedApiRecipes.map(recipe => recipe.id.toString());
+                    const likeCountsResponse = await fetch(`${API_CONFIG.BACKEND_URL}/api/recipes/like-counts`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ recipeIds: externalRecipeIds })
+                    });
+
+                    if (likeCountsResponse.ok) {
+                        const likeCountsData = await likeCountsResponse.json();
+                        
+                        // Update external recipes with like counts
+                        transformedApiRecipes.forEach(recipe => {
+                            recipe.likeCount = likeCountsData.likeCounts[recipe.id] || 0;
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error fetching like counts:', error);
+                    // Continue without like counts if there's an error
+                }
+            }
             
             // Combine recipes: user recipes first, then API recipes
             const combinedRecipes = [...transformedUserRecipes, ...transformedApiRecipes];

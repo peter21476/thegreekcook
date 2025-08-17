@@ -1614,6 +1614,47 @@ main {
         margin-bottom: 1rem;
       }
 
+      .about-content {
+        margin-bottom: 1.5rem;
+
+        p {
+          color: $text;
+          line-height: 1.6;
+          margin-bottom: 1rem;
+          white-space: pre-wrap;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+
+      .no-about {
+        color: #64748b;
+        font-style: italic;
+        margin-bottom: 1.5rem;
+      }
+
+      .about-stats {
+        border-top: 1px solid #e2e8f0;
+        padding-top: 1rem;
+        margin-top: 1rem;
+
+        p {
+          color: $text;
+          line-height: 1.6;
+          margin-bottom: 0.5rem;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+
+          strong {
+            color: $primary;
+          }
+        }
+      }
+
       p {
         color: $text;
         line-height: 1.6;
@@ -1636,5 +1677,135 @@ main {
   &:hover {
     color: $primary;
     text-decoration: underline;
+  }
+}
+
+// Like Button Styles
+.like-button-container {
+  display: inline-block;
+  margin-right: 1rem;
+
+  .like-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    background: white;
+    color: #64748b;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    text-decoration: none;
+
+    &:hover {
+      border-color: #fca5a5;
+      color: #ef4444;
+      transform: translateY(-1px);
+    }
+
+    &.liked {
+      border-color: #ef4444;
+      color: #ef4444;
+      background-color: #fef2f2;
+
+      &:hover {
+        background-color: #fee2e2;
+      }
+    }
+
+    &.loading {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .like-icon {
+      font-size: 1.1rem;
+    }
+
+    .like-count {
+      font-weight: 700;
+    }
+
+    .loading-spinner {
+      font-size: 0.75rem;
+      animation: spin 1s linear infinite;
+    }
+  }
+
+  .like-error {
+    color: #ef4444;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Recipe actions styling
+.recipe-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+
+  .like-section {
+    display: flex;
+    justify-content: center;
+  }
+
+  .button-link {
+    display: flex;
+    gap: 0.5rem;
+  }
+}
+
+.recipe-actions-details {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+// Update existing favorite button styles to work with new layout
+.favorite-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  background: white;
+  color: #64748b;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+
+  &:hover {
+    border-color: #fca5a5;
+    color: #ef4444;
+    transform: translateY(-1px);
+  }
+
+  &.favorited {
+    border-color: #ef4444;
+    color: #ef4444;
+    background-color: #fef2f2;
+
+    &:hover {
+      background-color: #fee2e2;
+    }
   }
 }

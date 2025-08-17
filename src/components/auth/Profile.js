@@ -14,6 +14,9 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('favorites'); // 'favorites' or 'submitted'
+  const [isEditingAbout, setIsEditingAbout] = useState(false);
+  const [aboutText, setAboutText] = useState('');
+  const [savingAbout, setSavingAbout] = useState(false);
 
   const fetchUserData = useCallback(async () => {
     try {
@@ -36,6 +39,7 @@ const Profile = () => {
 
       const userData = await userResponse.json();
       setUser(userData);
+      setAboutText(userData.about || '');
 
       // Fetch favorites
       const favoritesResponse = await fetch(`${API_CONFIG.BACKEND_URL}/api/user/favorites`, {
@@ -133,6 +137,56 @@ const Profile = () => {
     }
   };
 
+  const handleAboutUpdate = async () => {
+    try {
+      setSavingAbout(true);
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${API_CONFIG.BACKEND_URL}/api/user/about`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ about: aboutText })
+      });
+
+      // Check if response is JSON
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        // Handle non-JSON response (likely HTML error page)
+        const textResponse = await response.text();
+        console.error('Non-JSON response:', textResponse);
+        throw new Error('Server returned an invalid response. Please try again.');
+      }
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to update about description');
+      }
+
+      const data = await response.json();
+
+      // Update local user state
+      setUser(prevUser => ({
+        ...prevUser,
+        about: data.about
+      }));
+
+      setIsEditingAbout(false);
+      toast.success('About description updated successfully!');
+    } catch (error) {
+      toast.error(error.message);
+      console.error('Error updating about description:', error);
+    } finally {
+      setSavingAbout(false);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setAboutText(user?.about || '');
+    setIsEditingAbout(false);
+  };
+
   if (loading) {
     return (
       <div className="profile-container">
@@ -175,6 +229,55 @@ const Profile = () => {
             <p><strong>Email:</strong> {user.email}</p>
             {user.isAdmin && (
               <p className="admin-badge">Administrator</p>
+            )}
+          </div>
+
+          <div className="profile-section">
+            <h3>About Me</h3>
+            {isEditingAbout ? (
+              <div className="about-edit">
+                <textarea
+                  value={aboutText}
+                  onChange={(e) => setAboutText(e.target.value)}
+                  placeholder="Tell us about yourself, your cooking experience, favorite cuisines, or anything you'd like to share..."
+                  maxLength={500}
+                  rows={4}
+                  className="about-textarea"
+                />
+                <div className="about-edit-actions">
+                  <span className="char-count">{aboutText.length}/500</span>
+                  <div className="about-buttons">
+                    <button 
+                      onClick={handleCancelEdit} 
+                      className="btn btn-secondary"
+                      disabled={savingAbout}
+                    >
+                      Cancel
+                    </button>
+                    <button 
+                      onClick={handleAboutUpdate} 
+                      className="btn btn-primary"
+                      disabled={savingAbout}
+                    >
+                      {savingAbout ? 'Saving...' : 'Save'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="about-display">
+                {user.about ? (
+                  <p className="about-text">{user.about}</p>
+                ) : (
+                  <p className="about-placeholder">No description yet. Click edit to add one!</p>
+                )}
+                <button 
+                  onClick={() => setIsEditingAbout(true)} 
+                  className="btn btn-secondary edit-about-btn"
+                >
+                  Edit About
+                </button>
+              </div>
             )}
           </div>
 

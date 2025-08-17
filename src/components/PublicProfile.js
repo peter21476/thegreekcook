@@ -146,12 +146,21 @@ const PublicProfile = () => {
         <div className="about-section">
           <div className="about-card">
             <h3>About {user?.username}</h3>
-            <p>This is a public profile. {user?.username} has shared {recipes.length} recipe{recipes.length !== 1 ? 's' : ''} with the community.</p>
-            <p>Member since {new Date(user?.createdAt).toLocaleDateString('en-US', { 
-              year: 'numeric', 
-              month: 'long', 
-              day: 'numeric' 
-            })}</p>
+            {user?.about ? (
+              <div className="about-content">
+                <p>{user.about}</p>
+              </div>
+            ) : (
+              <p className="no-about">This user hasn't added an about description yet.</p>
+            )}
+            <div className="about-stats">
+              <p><strong>Recipes shared:</strong> {recipes.length}</p>
+              <p><strong>Member since:</strong> {new Date(user?.createdAt).toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+              })}</p>
+            </div>
           </div>
         </div>
       )}

@@ -11,6 +11,8 @@ import Results from './components/results';
 import Footer from './components/footer';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
+import ForgotPassword from './components/auth/ForgotPassword';
+import ResetPassword from './components/auth/ResetPassword';
 import Profile from './components/auth/Profile';
 import PublicProfile from './components/PublicProfile';
 import SubmitRecipe from './components/SubmitRecipe';
@@ -33,6 +35,8 @@ function App() {
             <Route path="/result-item/:id" element={<RecipeDetails />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/profile/:username" element={<PublicProfile />} />
             <Route path="/submit-recipe" element={<SubmitRecipe />} />

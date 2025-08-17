@@ -92,12 +92,34 @@ router.put('/profile-picture', auth, async (req, res) => {
   }
 });
 
+// Update about description
+router.put('/about', auth, async (req, res) => {
+  try {
+    const { about } = req.body;
+    
+    if (about && about.length > 500) {
+      return res.status(400).json({ message: 'About description must be 500 characters or less' });
+    }
+
+    const user = await User.findById(req.user._id);
+    user.about = about || '';
+    await user.save();
+
+    res.json({ 
+      message: 'About description updated successfully',
+      about: user.about
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating about description' });
+  }
+});
+
 // Get public user profile by username
 router.get('/public/:username', async (req, res) => {
   try {
     const { username } = req.params;
     
-    const user = await User.findOne({ username }).select('username profilePicture createdAt');
+    const user = await User.findOne({ username }).select('username profilePicture about createdAt');
     
     if (!user) {
       return res.status(404).json({ message: 'User not found' });

@@ -4,6 +4,7 @@ const Recipe = require('../models/Recipe');
 const User = require('../models/User');
 const auth = require('../middleware/auth');
 const { check, validationResult } = require('express-validator');
+const LikeService = require('../utils/likeService');
 
 // Middleware to check if user is admin
 const isAdmin = async (req, res, next) => {
@@ -200,6 +201,74 @@ router.get('/search', async (req, res) => {
     res.json(recipes);
   } catch (error) {
     res.status(500).json({ message: 'Error searching recipes' });
+  }
+});
+
+// Get like counts for multiple recipes (for external recipes)
+router.post('/like-counts', auth, async (req, res) => {
+  try {
+    const { recipeIds } = req.body;
+    
+    if (!Array.isArray(recipeIds)) {
+      return res.status(400).json({ message: 'recipeIds must be an array' });
+    }
+
+    const likeCounts = {};
+    
+    // Process each recipe ID
+    for (const recipeId of recipeIds) {
+      const likeCount = await LikeService.getLikeCount(recipeId);
+      likeCounts[recipeId] = likeCount;
+    }
+
+    res.json({ likeCounts });
+  } catch (error) {
+    console.error('Error getting like counts:', error);
+    res.status(500).json({ message: 'Error getting like counts', error: error.message });
+  }
+});
+
+// Check if user has liked a recipe (must come before /:id route)
+router.get('/:id/like-status', auth, async (req, res) => {
+  try {
+    console.log('Like status route called for recipe ID:', req.params.id);
+    console.log('User ID:', req.user._id);
+    console.log('Is internal recipe:', LikeService.isInternalRecipe(req.params.id));
+    
+    const likeStatus = await LikeService.getLikeStatus(req.params.id, req.user._id);
+    
+    console.log('Like status result:', likeStatus);
+    res.json(likeStatus);
+  } catch (error) {
+    console.error('Error checking like status:', error);
+    res.status(500).json({ message: 'Error checking like status', error: error.message });
+  }
+});
+
+// Like a recipe (must come before /:id route)
+router.post('/:id/like', auth, async (req, res) => {
+  try {
+    console.log('Like route called for recipe ID:', req.params.id);
+    console.log('User ID:', req.user._id);
+    console.log('Is internal recipe:', LikeService.isInternalRecipe(req.params.id));
+    
+    const wasLiked = await LikeService.toggleLike(req.params.id, req.user._id);
+    console.log('Was liked:', wasLiked);
+    
+    const likeStatus = await LikeService.getLikeStatus(req.params.id, req.user._id);
+    console.log('Updated like status:', likeStatus);
+
+    const response = {
+      message: wasLiked ? 'Recipe liked successfully' : 'Recipe unliked successfully',
+      isLiked: wasLiked,
+      likeCount: likeStatus.likeCount
+    };
+
+    console.log('Sending response:', response);
+    res.json(response);
+  } catch (error) {
+    console.error('Error toggling like:', error);
+    res.status(500).json({ message: 'Error toggling like', error: error.message });
   }
 });
 

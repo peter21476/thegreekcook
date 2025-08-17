@@ -6,6 +6,7 @@ import { faChartPie, faClock, faHeart, faHeartBroken } from "@fortawesome/free-s
 import {Link} from 'react-router-dom';
 import {Helmet} from 'react-helmet';
 import { API_CONFIG } from '../config';
+import LikeButton from './LikeButton';
 
 function RecipeDetails() {
     const navigate = useNavigate();
@@ -224,18 +225,24 @@ function RecipeDetails() {
                         <p>
                             <FontAwesomeIcon icon={faChartPie} /> Serving: {recipe.servings} | 
                             <FontAwesomeIcon icon={faClock} /> Ready in {recipe.readyInMinutes} min.
-                            {isLoggedIn && (
-                                <>
-                                    <button 
-                                        onClick={toggleFavorite} 
-                                        className={`favorite-btn ${isFavorite ? 'favorited' : ''}`}
-                                    >
-                                        <FontAwesomeIcon icon={isFavorite ? faHeart : faHeartBroken} />
-                                        {isFavorite ? ' Remove from Favorites' : ' Add to Favorites'}
-                                    </button>
-                                    {error && <div className="error-message">{error}</div>}
-                                </>
-                            )}
+                            <div className="recipe-actions-details">
+                                <LikeButton 
+                                    recipeId={id} 
+                                    initialLikeCount={recipe.likeCount || 0}
+                                />
+                                {isLoggedIn && (
+                                    <>
+                                        <button 
+                                            onClick={toggleFavorite} 
+                                            className={`favorite-btn ${isFavorite ? 'favorited' : ''}`}
+                                        >
+                                            <FontAwesomeIcon icon={isFavorite ? faHeart : faHeartBroken} />
+                                            {isFavorite ? ' Remove from Favorites' : ' Add to Favorites'}
+                                        </button>
+                                        {error && <div className="error-message">{error}</div>}
+                                    </>
+                                )}
+                            </div>
                         </p>
                     </div>
                 </div>
