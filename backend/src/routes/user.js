@@ -70,4 +70,43 @@ router.delete('/favorites/:recipeId', auth, async (req, res) => {
   }
 });
 
+// Update profile picture
+router.put('/profile-picture', auth, async (req, res) => {
+  try {
+    const { profilePicture } = req.body;
+    
+    if (!profilePicture) {
+      return res.status(400).json({ message: 'Profile picture URL is required' });
+    }
+
+    const user = await User.findById(req.user._id);
+    user.profilePicture = profilePicture;
+    await user.save();
+
+    res.json({ 
+      message: 'Profile picture updated successfully',
+      profilePicture: user.profilePicture
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating profile picture' });
+  }
+});
+
+// Get public user profile by username
+router.get('/public/:username', async (req, res) => {
+  try {
+    const { username } = req.params;
+    
+    const user = await User.findOne({ username }).select('username profilePicture createdAt');
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching user profile' });
+  }
+});
+
 module.exports = router; 

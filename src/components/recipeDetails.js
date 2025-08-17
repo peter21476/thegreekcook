@@ -96,7 +96,8 @@ function RecipeDetails() {
                         }))
                     }],
                     isUserRecipe: true,
-                    submittedBy: userRecipe.submittedBy?.username || 'User'
+                    submittedBy: userRecipe.submittedBy?.username || 'User',
+                    submittedByUser: userRecipe.submittedBy
                 };
                 
                 setRecipe(transformedRecipe);
@@ -201,7 +202,22 @@ function RecipeDetails() {
                             {recipe.isUserRecipe && (
                                 <div className="user-recipe-badge-details">
                                     <span className="badge">User Recipe</span>
-                                    {recipe.submittedBy && <span className="submitted-by">by {recipe.submittedBy}</span>}
+                                    {recipe.submittedBy && (
+                                        <div className="submitted-by">
+                                            {recipe.submittedByUser?.profilePicture ? (
+                                                <img 
+                                                    src={recipe.submittedByUser.profilePicture} 
+                                                    alt={recipe.submittedBy} 
+                                                    className="submitter-profile-picture-details"
+                                                />
+                                            ) : (
+                                                <span className="submitter-icon-details">👤</span>
+                                            )}
+                                            <Link to={`/profile/${recipe.submittedBy}`} className="submitter-name-details">
+                                                by {recipe.submittedBy}
+                                            </Link>
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </div>

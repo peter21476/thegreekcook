@@ -12,6 +12,7 @@ import Footer from './components/footer';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import Profile from './components/auth/Profile';
+import PublicProfile from './components/PublicProfile';
 import SubmitRecipe from './components/SubmitRecipe';
 import RecipeApproval from './components/admin/RecipeApproval';
 import EditRecipe from './components/EditRecipe';
@@ -33,6 +34,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/profile/:username" element={<PublicProfile />} />
             <Route path="/submit-recipe" element={<SubmitRecipe />} />
             <Route path="/edit-recipe/:id" element={<EditRecipe />} />
             <Route path="/admin/recipes" element={<RecipeApproval />} />

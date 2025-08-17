@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import './Auth.scss';
 import { API_CONFIG } from '../../config';
 import { Helmet } from 'react-helmet';
+import ProfilePictureUpload from '../ProfilePictureUpload';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -103,6 +104,35 @@ const Profile = () => {
     }
   };
 
+  const handleProfilePictureUpdate = async (imageUrl) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${API_CONFIG.BACKEND_URL}/api/user/profile-picture`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ profilePicture: imageUrl })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update profile picture');
+      }
+
+      // Update local user state
+      setUser(prevUser => ({
+        ...prevUser,
+        profilePicture: imageUrl
+      }));
+
+      toast.success('Profile picture updated successfully!');
+    } catch (error) {
+      toast.error('Error updating profile picture');
+      console.error('Error updating profile picture:', error);
+    }
+  };
+
   if (loading) {
     return (
       <div className="profile-container">
@@ -134,6 +164,13 @@ const Profile = () => {
         <div className="profile-info">
           <div className="profile-section">
             <h3>User Information</h3>
+            <div className="profile-picture-section">
+              <ProfilePictureUpload
+                onImageUpload={handleProfilePictureUpdate}
+                currentImage={user.profilePicture}
+                className="profile-picture-upload"
+              />
+            </div>
             <p><strong>Username:</strong> {user.username}</p>
             <p><strong>Email:</strong> {user.email}</p>
             {user.isAdmin && (

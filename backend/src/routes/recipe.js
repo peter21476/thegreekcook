@@ -54,7 +54,7 @@ router.post('/submit', [
 router.get('/pending', [auth, isAdmin], async (req, res) => {
   try {
     const recipes = await Recipe.find({ status: 'pending' })
-      .populate('submittedBy', 'username email')
+      .populate('submittedBy', 'username email profilePicture')
       .sort({ createdAt: -1 });
     res.json(recipes);
   } catch (error) {
@@ -112,7 +112,7 @@ router.put('/reject/:id', [
 router.get('/approved', async (req, res) => {
   try {
     const recipes = await Recipe.find({ status: 'approved' })
-      .populate('submittedBy', 'username')
+      .populate('submittedBy', 'username profilePicture')
       .sort({ approvedAt: -1 });
     res.json(recipes);
   } catch (error) {
@@ -131,6 +131,31 @@ router.get('/my-recipes', auth, async (req, res) => {
   }
 });
 
+// Get approved recipes by username (public)
+router.get('/user/:username', async (req, res) => {
+  try {
+    const { username } = req.params;
+    
+    // Find user by username
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Get approved recipes by this user
+    const recipes = await Recipe.find({ 
+      submittedBy: user._id,
+      status: 'approved'
+    })
+    .populate('submittedBy', 'username profilePicture')
+    .sort({ approvedAt: -1 });
+
+    res.json(recipes);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching user recipes' });
+  }
+});
+
 // Search approved recipes by query
 router.get('/search', async (req, res) => {
   try {
@@ -140,6 +165,21 @@ router.get('/search', async (req, res) => {
       return res.status(400).json({ message: 'Query parameter is required' });
     }
 
+    // First get recipes without population to see the raw data
+    const rawRecipes = await Recipe.find({
+      $or: [
+        { title: { $regex: query, $options: 'i' } },
+        { description: { $regex: query, $options: 'i' } },
+        { 'ingredients.name': { $regex: query, $options: 'i' } }
+      ]
+    }).sort({ createdAt: -1 });
+
+    console.log('Raw recipes before population:', rawRecipes.map(r => ({
+      title: r.title,
+      submittedBy: r.submittedBy,
+      submittedByType: typeof r.submittedBy
+    })));
+
     const recipes = await Recipe.find({
       $or: [
         { title: { $regex: query, $options: 'i' } },
@@ -147,8 +187,15 @@ router.get('/search', async (req, res) => {
         { 'ingredients.name': { $regex: query, $options: 'i' } }
       ]
     })
-    .populate('submittedBy', 'username')
+    .populate('submittedBy', 'username profilePicture')
     .sort({ createdAt: -1 });
+
+    // Debug logging
+    console.log('Search results after population:', recipes.map(r => ({
+      title: r.title,
+      submittedBy: r.submittedBy,
+      submittedByType: typeof r.submittedBy
+    })));
 
     res.json(recipes);
   } catch (error) {
@@ -160,7 +207,7 @@ router.get('/search', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const recipe = await Recipe.findById(req.params.id)
-      .populate('submittedBy', 'username');
+      .populate('submittedBy', 'username profilePicture');
     
     if (!recipe) {
       return res.status(404).json({ message: 'Recipe not found' });

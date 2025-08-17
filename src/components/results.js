@@ -43,8 +43,12 @@ function RecipesResults() {
                 id: recipe._id,
                 readyInMinutes: recipe.prepTime + recipe.cookTime,
                 isUserRecipe: true,
-                submittedBy: recipe.submittedBy?.username || 'User'
+                submittedBy: recipe.submittedBy // Keep the full object instead of just username
             }));
+            
+            // Debug logging
+            console.log('User recipes from API:', userRecipes);
+            console.log('Transformed user recipes:', transformedUserRecipes);
             
             // Fetch API recipes
             const apiUrl = `${API_CONFIG.API_BASE_URL}/search?query=${value}&cuisine=greek&number=100&apiKey=${API_CONFIG.APP_KEY}`;

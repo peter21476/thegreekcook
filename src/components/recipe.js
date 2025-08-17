@@ -6,6 +6,15 @@ function recipeModel({title, image, minutes, servings, recipeId, isHomePage, isU
     // Handle both string and object submittedBy
     const submittedById = typeof submittedBy === 'object' ? submittedBy._id : submittedBy;
     const isOwner = isUserRecipe && (currentUser._id === submittedById || currentUser.isAdmin);
+    
+    // Extract username and profile picture from submittedBy
+    const username = typeof submittedBy === 'object' ? submittedBy.username : submittedBy;
+    const profilePicture = typeof submittedBy === 'object' ? submittedBy.profilePicture : null;
+
+    // Debug logging
+    console.log('Recipe submittedBy data:', submittedBy);
+    console.log('Username:', username);
+    console.log('Profile picture:', profilePicture);
 
     return (
         <div className={`${!isHomePage ? 'col-md-4' : ''} recipe-column`}>
@@ -13,7 +22,22 @@ function recipeModel({title, image, minutes, servings, recipeId, isHomePage, isU
                 {isUserRecipe && (
                     <div className="user-recipe-badge">
                         <span className="badge">User Recipe</span>
-                        {submittedBy && <span className="submitted-by">by {submittedBy}</span>}
+                        {username && (
+                            <div className="submitted-by">
+                                {profilePicture ? (
+                                    <img 
+                                        src={profilePicture} 
+                                        alt={username} 
+                                        className="submitter-profile-picture"
+                                    />
+                                ) : (
+                                    <span className="submitter-icon">👤</span>
+                                )}
+                                <Link to={`/profile/${username}`} className="submitter-name">
+                                    by {username}
+                                </Link>
+                            </div>
+                        )}
                     </div>
                 )}
                 <div

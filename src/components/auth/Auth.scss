@@ -551,4 +551,135 @@ $text-light: #666666;
       }
     }
   }
+}
+
+// Profile Picture Upload Styles
+.profile-picture-upload {
+  margin-bottom: 1.5rem;
+
+  .profile-picture-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+
+  .profile-picture-preview {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #e2e8f0;
+    transition: all 0.3s ease;
+
+    &:hover {
+      border-color: #2563eb;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .profile-picture-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      gap: 0.5rem;
+
+      &:hover {
+        opacity: 1;
+      }
+
+      .btn {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &.btn-primary {
+          background-color: #2563eb;
+          color: white;
+
+          &:hover {
+            background-color: #1d4ed8;
+          }
+
+          &:disabled {
+            background-color: #93c5fd;
+            cursor: not-allowed;
+          }
+        }
+
+        &.btn-danger {
+          background-color: #ef4444;
+          color: white;
+
+          &:hover {
+            background-color: #dc2626;
+          }
+
+          &:disabled {
+            background-color: #fca5a5;
+            cursor: not-allowed;
+          }
+        }
+      }
+    }
+  }
+
+  .profile-picture-placeholder {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px dashed #cbd5e1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: #f8fafc;
+
+    &:hover {
+      border-color: #2563eb;
+      background-color: #eff6ff;
+    }
+
+    .profile-picture-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: #64748b;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.875rem;
+      color: #64748b;
+      text-align: center;
+    }
+
+    .uploading-text {
+      color: #2563eb;
+      font-weight: 500;
+    }
+  }
+}
+
+.profile-picture-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
 } 
