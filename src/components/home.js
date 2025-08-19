@@ -8,6 +8,7 @@ import LoginBox from './auth/LoginBox';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import analytics from '../utils/analytics';
 
 function Home() {
     const [searchValue, setSearchValue] = useState('');
@@ -112,6 +113,12 @@ function Home() {
         }
     }
 
+    const handleSearch = () => {
+        if (searchValue.trim()) {
+            analytics.trackRecipeSearch(searchValue.trim(), 0); // Results count will be tracked in Results component
+        }
+    };
+
     const sliderSettings = {
         dots: true,
         infinite: true,
@@ -142,7 +149,7 @@ function Home() {
                                 onChange={getValue}
                             />
                             <Link to={createLink}>
-                                <button className="btn btn-search">Search</button>
+                                <button className="btn btn-search" onClick={handleSearch}>Search</button>
                             </Link>
                         </div>
                     </div>

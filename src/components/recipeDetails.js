@@ -7,6 +7,7 @@ import {Link} from 'react-router-dom';
 import {Helmet} from 'react-helmet';
 import { API_CONFIG } from '../config';
 import LikeButton from './LikeButton';
+import analytics from '../utils/analytics';
 
 function RecipeDetails() {
     const navigate = useNavigate();
@@ -157,6 +158,13 @@ function RecipeDetails() {
         window.scrollTo(0, 0);
     }, [id]);
 
+    // Track recipe view when recipe is loaded
+    useEffect(() => {
+        if (recipe && !loading) {
+            analytics.trackRecipeView(recipe.title, recipe.id || recipe._id, recipe.isUserRecipe);
+        }
+    }, [recipe, loading]);
+
     if (loading) {
         return <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>;
     }
@@ -177,8 +185,56 @@ function RecipeDetails() {
     return (
         <div className="recipe-details-wrapper">
             <Helmet>
-                <title>Zorbas' Kitchen | {recipe.title}</title>
-                <meta name="description" content={`Recipe for ${recipe.title}`} />
+                <title>{recipe.title} | Zorbas' Kitchen</title>
+                <meta name="description" content={`Learn how to make ${recipe.title}. Authentic Greek recipe with step-by-step instructions, ingredients, and cooking tips.`} />
+                <meta name="keywords" content={`${recipe.title}, Greek recipe, Mediterranean food, cooking instructions, ingredients`} />
+                
+                {/* Open Graph for Recipe */}
+                <meta property="og:title" content={`${recipe.title} | Zorbas' Kitchen`} />
+                <meta property="og:description" content={`Learn how to make ${recipe.title}. Authentic Greek recipe with step-by-step instructions.`} />
+                <meta property="og:type" content="article" />
+                <meta property="og:image" content={recipe.image || `${window.location.origin}/img/recipe-placeholder.jpg`} />
+                
+                {/* Twitter Card */}
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content={`${recipe.title} | Zorbas' Kitchen`} />
+                <meta name="twitter:description" content={`Learn how to make ${recipe.title}. Authentic Greek recipe.`} />
+                <meta name="twitter:image" content={recipe.image || `${window.location.origin}/img/recipe-placeholder.jpg`} />
+                
+                {/* Recipe Structured Data */}
+                <script type="application/ld+json">
+                {JSON.stringify({
+                  "@context": "https://schema.org",
+                  "@type": "Recipe",
+                  "name": recipe.title,
+                  "description": recipe.summary || recipe.description,
+                  "image": recipe.image || `${window.location.origin}/img/recipe-placeholder.jpg`,
+                  "author": {
+                    "@type": "Person",
+                    "name": recipe.isUserRecipe ? (recipe.submittedByUser?.username || "Community Member") : "Traditional Greek Recipe"
+                  },
+                  "datePublished": recipe.createdAt || new Date().toISOString(),
+                  "prepTime": recipe.prepTime ? `PT${recipe.prepTime}M` : undefined,
+                  "cookTime": recipe.cookTime ? `PT${recipe.cookTime}M` : undefined,
+                  "totalTime": recipe.readyInMinutes ? `PT${recipe.readyInMinutes}M` : undefined,
+                  "recipeYield": recipe.servings ? `${recipe.servings} servings` : undefined,
+                  "recipeCategory": "Greek Cuisine",
+                  "recipeCuisine": "Greek",
+                  "recipeIngredient": recipe.extendedIngredients?.map(ing => ing.original) || recipe.ingredients?.map(ing => `${ing.amount} ${ing.name}`) || [],
+                  "recipeInstructions": recipe.analyzedInstructions?.[0]?.steps?.map(step => ({
+                    "@type": "HowToStep",
+                    "position": step.number,
+                    "text": step.step
+                  })) || recipe.instructions?.map(inst => ({
+                    "@type": "HowToStep",
+                    "position": inst.step,
+                    "text": inst.description
+                  })) || [],
+                  "nutrition": {
+                    "@type": "NutritionInformation"
+                  }
+                })}
+                </script>
             </Helmet>
             <div className="container navigation-item">
                 <div className="row">
@@ -229,6 +285,7 @@ function RecipeDetails() {
                                 <LikeButton 
                                     recipeId={id} 
                                     initialLikeCount={recipe.likeCount || 0}
+                                    recipeTitle={recipe.title}
                                 />
                                 {isLoggedIn && (
                                     <>

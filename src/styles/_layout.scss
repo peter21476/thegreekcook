@@ -16,7 +16,7 @@
   box-shadow: $shadow-sm;
   
   .header-logo {
-    max-width: 250px;
+    max-width: 150px;
     height: auto;
   }
 }
@@ -26,12 +26,27 @@
   text-align: left;
   
   p {
-    color: $text;
+    color: $secondary;
     font-style: italic;
-    font-size: $font-size-xl;
+    font-size: $font-size-lg;
     font-weight: $font-weight-medium;
     text-shadow: none;
     margin: $spacing-md 0;
+    text-align: center;
+    position: relative;
+    padding: 0.5rem 0;
+    
+    &::before {
+      content: '🏺';
+      margin-right: 0.5rem;
+      font-style: normal;
+    }
+    
+    &::after {
+      content: '🏺';
+      margin-left: 0.5rem;
+      font-style: normal;
+    }
   }
 }
 

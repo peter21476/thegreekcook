@@ -1,3 +1,31 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Allow: /
+
+# Disallow admin and private areas
+Disallow: /admin/
+Disallow: /profile/
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /reset-password
+
+# Allow important pages
+Allow: /results/
+Allow: /result-item/
+
+# Crawl delay (optional - be respectful to server)
+Crawl-delay: 1
+
+# Sitemap location (you'll need to create this)
+Sitemap: https://yourdomain.com/sitemap.xml
+
+# Additional user agents
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /

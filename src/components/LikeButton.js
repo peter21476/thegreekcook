@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { API_CONFIG } from '../config';
+import analytics from '../utils/analytics';
 
-const LikeButton = ({ recipeId, initialLikeCount = 0, onLikeChange }) => {
+const LikeButton = ({ recipeId, initialLikeCount = 0, onLikeChange, recipeTitle }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(initialLikeCount);
   const [loading, setLoading] = useState(false);
@@ -69,6 +70,9 @@ const LikeButton = ({ recipeId, initialLikeCount = 0, onLikeChange }) => {
         const data = await response.json();
         setIsLiked(data.isLiked);
         setLikeCount(data.likeCount);
+        
+        // Track like action
+        analytics.trackRecipeLike(recipeTitle || 'Recipe', recipeId, data.isLiked ? 'like' : 'unlike');
         
         // Call the callback if provided
         if (onLikeChange) {

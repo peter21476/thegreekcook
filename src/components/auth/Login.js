@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './Auth.scss';
 import { API_CONFIG } from '../../config';
+import analytics from '../../utils/analytics';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -41,6 +42,8 @@ const Login = () => {
         localStorage.setItem('token', data.token);
         // Store user data if needed
         localStorage.setItem('user', JSON.stringify(data.user));
+        // Track successful login
+        analytics.trackUserLogin('email');
         // Dispatch login event
         window.dispatchEvent(new Event('login'));
         navigate('/profile');

@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { API_CONFIG } from '../config';
 import { Helmet } from 'react-helmet';
 import ImageUpload from './ImageUpload';
+import analytics from '../utils/analytics';
 
 function SubmitRecipe() {
   const navigate = useNavigate();
@@ -97,6 +98,8 @@ function SubmitRecipe() {
         throw new Error(error.message || 'Failed to submit recipe');
       }
 
+      // Track recipe submission
+      analytics.trackRecipeSubmission(formData.title);
       toast.success('Recipe submitted successfully! Waiting for admin approval.');
       navigate('/profile');
     } catch (error) {

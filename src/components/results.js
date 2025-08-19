@@ -5,6 +5,7 @@ import {Link, useNavigate, useParams} from 'react-router-dom';
 import {Helmet} from 'react-helmet';
 import ImagePlaceholder from '../img/recipe-placeholder.jpg';
 import { API_CONFIG } from '../config';
+import analytics from '../utils/analytics';
 
 function RecipesResults() {
     const navigate = useNavigate();
@@ -91,6 +92,9 @@ function RecipesResults() {
             
             // Combine recipes: user recipes first, then API recipes
             const combinedRecipes = [...transformedUserRecipes, ...transformedApiRecipes];
+            
+            // Track search results
+            analytics.trackRecipeSearch(value, combinedRecipes.length);
             
             if (combinedRecipes.length < 1) {
                 setErrorMessage('Sorry, No Recipe Found. Please try a different ingredient.');

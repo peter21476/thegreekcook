@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './Auth.scss';
 import { API_CONFIG } from '../../config';
+import analytics from '../../utils/analytics';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -53,6 +54,8 @@ const Register = () => {
 
       if (response.ok) {
         setSuccess(true);
+        // Track successful registration
+        analytics.trackUserRegistration('email');
         toast.success('Registration successful! Welcome to Zorba\'s Kitchen!', {
           position: "top-center",
           autoClose: 3000,

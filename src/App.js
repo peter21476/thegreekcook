@@ -18,9 +18,12 @@ import PublicProfile from './components/PublicProfile';
 import SubmitRecipe from './components/SubmitRecipe';
 import RecipeApproval from './components/admin/RecipeApproval';
 import UserManagement from './components/admin/UserManagement';
+import SitemapGenerator from './components/admin/SitemapGenerator';
+import AnalyticsDashboard from './components/admin/AnalyticsDashboard';
 import EditRecipe from './components/EditRecipe';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
+import GoogleAnalytics from './components/GoogleAnalytics';
 
 library.add(fab);
 
@@ -28,6 +31,7 @@ function App() {
   return (
     <div className="main-wrapper">
       <Router>
+        <GoogleAnalytics />
         <Header />
         <main>
           <Routes>
@@ -44,6 +48,8 @@ function App() {
             <Route path="/edit-recipe/:id" element={<EditRecipe />} />
             <Route path="/admin/recipes" element={<RecipeApproval />} />
             <Route path="/admin/users" element={<UserManagement />} />
+            <Route path="/admin/sitemap" element={<SitemapGenerator />} />
+            <Route path="/admin/analytics" element={<AnalyticsDashboard />} />
           </Routes>
         </main>
         <Footer />
