@@ -34,7 +34,7 @@ function Home() {
                 id: recipe._id,
                 readyInMinutes: recipe.prepTime + recipe.cookTime,
                 isUserRecipe: true,
-                submittedBy: recipe.submittedBy?.username || 'User',
+                submittedBy: recipe.submittedBy, // Keep the full object instead of just username
                 likeCount: recipe.likeCount || 0
             }));
             

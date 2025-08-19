@@ -55,20 +55,14 @@ router.post('/image', auth, upload.single('image'), async (req, res) => {
 
 // Upload profile picture route
 router.post('/profile-picture', auth, upload.single('image'), async (req, res) => {
-  console.log('Profile picture upload route hit');
   try {
     if (!req.file) {
-      console.log('No file provided');
       return res.status(400).json({ message: 'No image file provided' });
     }
-
-    console.log('File received:', req.file.originalname, req.file.mimetype);
 
     // Convert buffer to base64
     const b64 = Buffer.from(req.file.buffer).toString('base64');
     const dataURI = `data:${req.file.mimetype};base64,${b64}`;
-
-    console.log('Uploading to Cloudinary...');
 
     // Upload to Cloudinary with profile-specific transformations
     const result = await cloudinary.uploader.upload(dataURI, {
@@ -78,8 +72,6 @@ router.post('/profile-picture', auth, upload.single('image'), async (req, res) =
         { quality: 'auto' }
       ]
     });
-
-    console.log('Upload successful:', result.secure_url);
 
     res.json({
       success: true,

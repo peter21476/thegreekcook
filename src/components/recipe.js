@@ -1,6 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import LikeButton from './LikeButton';
+import { API_CONFIG } from '../config';
 
 function recipeModel({title, image, minutes, servings, recipeId, isHomePage, isUserRecipe, submittedBy, likeCount = 0}) {
     const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
@@ -12,10 +13,7 @@ function recipeModel({title, image, minutes, servings, recipeId, isHomePage, isU
     const username = typeof submittedBy === 'object' ? submittedBy.username : submittedBy;
     const profilePicture = typeof submittedBy === 'object' ? submittedBy.profilePicture : null;
 
-    // Debug logging
-    console.log('Recipe submittedBy data:', submittedBy);
-    console.log('Username:', username);
-    console.log('Profile picture:', profilePicture);
+
 
     // Determine if we're in a grid context (public profile)
     const isInGrid = window.location.pathname.includes('/profile/') && !isHomePage;
@@ -50,18 +48,18 @@ function recipeModel({title, image, minutes, servings, recipeId, isHomePage, isU
                     backgroundImage: `url(${image})`
                 }}></div>
                 <div className="recipe-text">
-                    <h5>{title}</h5>
-                    <p>Ready in {minutes}
-                        min.<br />
-            Servings: {servings}</p>
-                </div>
-                <div className="recipe-actions">
-                    <div className="like-section">
+                    <div className="recipe-title-section">
+                        <h5>{title}</h5>
                         <LikeButton 
                             recipeId={recipeId} 
                             initialLikeCount={likeCount}
                         />
                     </div>
+                    <p>Ready in {minutes}
+                        min.<br />
+            Servings: {servings}</p>
+                </div>
+                <div className="recipe-actions">
                     <div className="button-link">
                         <Link to={`/result-item/${recipeId}?page=${window.location.pathname.includes('/results/') ? new URLSearchParams(window.location.search).get('page') || 1 : 1}`}>
                             <button className="btn btn-item">View Recipe</button>

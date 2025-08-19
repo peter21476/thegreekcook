@@ -21,18 +21,14 @@ const LikeButton = ({ recipeId, initialLikeCount = 0, onLikeChange }) => {
       const token = localStorage.getItem('token');
       if (!token) return;
 
-      console.log('Checking like status for recipe:', recipeId);
       const response = await fetch(`${API_CONFIG.BACKEND_URL}/api/recipes/${recipeId}/like-status`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
-
-      console.log('Like status response:', response.status);
       
       if (response.ok) {
         const data = await response.json();
-        console.log('Like status data:', data);
         setIsLiked(data.isLiked);
         setLikeCount(data.likeCount);
       } else {
@@ -61,7 +57,6 @@ const LikeButton = ({ recipeId, initialLikeCount = 0, onLikeChange }) => {
         throw new Error('No authentication token found');
       }
 
-      console.log('Toggling like for recipe:', recipeId);
       const response = await fetch(`${API_CONFIG.BACKEND_URL}/api/recipes/${recipeId}/like`, {
         method: 'POST',
         headers: {
@@ -70,11 +65,8 @@ const LikeButton = ({ recipeId, initialLikeCount = 0, onLikeChange }) => {
         }
       });
 
-      console.log('Like toggle response:', response.status);
-
       if (response.ok) {
         const data = await response.json();
-        console.log('Like toggle data:', data);
         setIsLiked(data.isLiked);
         setLikeCount(data.likeCount);
         
@@ -89,7 +81,7 @@ const LikeButton = ({ recipeId, initialLikeCount = 0, onLikeChange }) => {
           const errorData = await response.json();
           errorMessage = errorData.message || errorMessage;
         } catch (e) {
-          console.error('Could not parse error response:', e);
+          // Could not parse error response
         }
         
         console.error('Like toggle failed:', response.status, errorMessage);

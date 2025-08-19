@@ -47,9 +47,7 @@ function RecipesResults() {
                 likeCount: recipe.likeCount || 0
             }));
             
-            // Debug logging
-            console.log('User recipes from API:', userRecipes);
-            console.log('Transformed user recipes:', transformedUserRecipes);
+
             
             // Fetch API recipes
             const apiUrl = `${API_CONFIG.API_BASE_URL}/search?query=${value}&cuisine=greek&number=100&apiKey=${API_CONFIG.APP_KEY}`;

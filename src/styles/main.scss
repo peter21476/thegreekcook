@@ -1,0 +1,27 @@
+// =============================================================================
+// MAIN SCSS FILE
+// =============================================================================
+// This file imports all SCSS partials in the correct order
+
+// 1. Variables and mixins (must come first)
+@import 'variables';
+@import 'mixins';
+
+// 2. Base styles
+@import 'base';
+
+// 3. Layout styles
+@import 'layout';
+
+// 4. Component styles
+@import 'components';
+
+// 5. Feature-specific styles
+@import 'recipes';
+@import 'admin';
+
+// 6. Utility styles (must come last)
+@import 'utilities';
+
+// 7. App-specific styles (must come last to override any conflicting styles)
+@import '../App';

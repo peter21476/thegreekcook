@@ -175,11 +175,7 @@ router.get('/search', async (req, res) => {
       ]
     }).sort({ createdAt: -1 });
 
-    console.log('Raw recipes before population:', rawRecipes.map(r => ({
-      title: r.title,
-      submittedBy: r.submittedBy,
-      submittedByType: typeof r.submittedBy
-    })));
+
 
     const recipes = await Recipe.find({
       $or: [
@@ -191,12 +187,7 @@ router.get('/search', async (req, res) => {
     .populate('submittedBy', 'username profilePicture')
     .sort({ createdAt: -1 });
 
-    // Debug logging
-    console.log('Search results after population:', recipes.map(r => ({
-      title: r.title,
-      submittedBy: r.submittedBy,
-      submittedByType: typeof r.submittedBy
-    })));
+
 
     res.json(recipes);
   } catch (error) {
@@ -231,13 +222,7 @@ router.post('/like-counts', auth, async (req, res) => {
 // Check if user has liked a recipe (must come before /:id route)
 router.get('/:id/like-status', auth, async (req, res) => {
   try {
-    console.log('Like status route called for recipe ID:', req.params.id);
-    console.log('User ID:', req.user._id);
-    console.log('Is internal recipe:', LikeService.isInternalRecipe(req.params.id));
-    
     const likeStatus = await LikeService.getLikeStatus(req.params.id, req.user._id);
-    
-    console.log('Like status result:', likeStatus);
     res.json(likeStatus);
   } catch (error) {
     console.error('Error checking like status:', error);
@@ -248,23 +233,15 @@ router.get('/:id/like-status', auth, async (req, res) => {
 // Like a recipe (must come before /:id route)
 router.post('/:id/like', auth, async (req, res) => {
   try {
-    console.log('Like route called for recipe ID:', req.params.id);
-    console.log('User ID:', req.user._id);
-    console.log('Is internal recipe:', LikeService.isInternalRecipe(req.params.id));
-    
     const wasLiked = await LikeService.toggleLike(req.params.id, req.user._id);
-    console.log('Was liked:', wasLiked);
     
     const likeStatus = await LikeService.getLikeStatus(req.params.id, req.user._id);
-    console.log('Updated like status:', likeStatus);
 
     const response = {
       message: wasLiked ? 'Recipe liked successfully' : 'Recipe unliked successfully',
       isLiked: wasLiked,
       likeCount: likeStatus.likeCount
     };
-
-    console.log('Sending response:', response);
     res.json(response);
   } catch (error) {
     console.error('Error toggling like:', error);

@@ -1,6 +1,6 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFacebook, faInstagram, faTwitter } from '@fortawesome/free-brands-svg-icons';
 
 function Footer() {
     const currentYear = new Date().getFullYear();
@@ -8,10 +8,39 @@ function Footer() {
     return (
         <footer className="footer-custom">
             <div className="container">
-                <div className="row">
-                    <div className="col-md-12 text-center">
-                        <p>&copy; {currentYear} - Zorba's Kitchen</p>
+                <div className="footer-content">
+                    <div className="footer-section">
+                        <h4>Zorba's Kitchen</h4>
+                        <p>Discover authentic Greek recipes and share your culinary passion with our community.</p>
                     </div>
+                    
+                    <div className="footer-section">
+                        <h4>Quick Links</h4>
+                        <ul className="footer-links">
+                            <li><a href="/">Home</a></li>
+                            <li><a href="/submit-recipe">Submit Recipe</a></li>
+                            <li><a href="/profile">My Profile</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div className="footer-section">
+                        <h4>Connect With Us</h4>
+                        <div className="social-links">
+                            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+                                <FontAwesomeIcon icon={faFacebook} />
+                            </a>
+                            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+                                <FontAwesomeIcon icon={faInstagram} />
+                            </a>
+                            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+                                <FontAwesomeIcon icon={faTwitter} />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div className="footer-bottom">
+                    <p>&copy; {currentYear} Zorba's Kitchen. All rights reserved.</p>
                 </div>
             </div>
         </footer>

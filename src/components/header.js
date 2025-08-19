@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Logo from '../img/logo.png';
+import Logo from '../img/zorbaslogo.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { API_CONFIG } from '../config';
 
@@ -87,10 +87,10 @@ function Header() {
 
     return (
         <div className="header-wrapper">
-            <div className="container text-center header-section">
+            <div className="container header-section">
                 <div className="row">
                     <div className="col-md-12">
-                        <Link to="/"><img className="img-fluid" src={Logo} alt="logo"/></Link>
+                        <Link to="/"><img className="img-fluid header-logo" src={Logo} alt="logo"/></Link>
                         <p>Turn your fridge into a Greek taverna—cook with whatever you've got!</p>
                     </div>
                 </div>
@@ -111,6 +111,12 @@ function Header() {
                             )}
                             Profile
                         </Link>
+                        {user?.isAdmin && (
+                            <div className="admin-links">
+                                <Link to="/admin/recipes" className="auth-link admin-link">Recipe Approval</Link>
+                                <Link to="/admin/users" className="auth-link admin-link">User Management</Link>
+                            </div>
+                        )}
                         <button onClick={handleLogout} className="auth-link logout-btn">Logout</button>
                     </>
                 ) : (

@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from './components/header';
-import './App.scss';
+import './styles/main.scss';
 import 'react-animated-css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -17,6 +17,7 @@ import Profile from './components/auth/Profile';
 import PublicProfile from './components/PublicProfile';
 import SubmitRecipe from './components/SubmitRecipe';
 import RecipeApproval from './components/admin/RecipeApproval';
+import UserManagement from './components/admin/UserManagement';
 import EditRecipe from './components/EditRecipe';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
@@ -42,6 +43,7 @@ function App() {
             <Route path="/submit-recipe" element={<SubmitRecipe />} />
             <Route path="/edit-recipe/:id" element={<EditRecipe />} />
             <Route path="/admin/recipes" element={<RecipeApproval />} />
+            <Route path="/admin/users" element={<UserManagement />} />
           </Routes>
         </main>
         <Footer />

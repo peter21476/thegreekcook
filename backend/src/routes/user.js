@@ -131,4 +131,19 @@ router.get('/public/:username', async (req, res) => {
   }
 });
 
+// Get all users (admin only)
+router.get('/all', auth, async (req, res) => {
+  try {
+    // Check if user is admin
+    if (!req.user.isAdmin) {
+      return res.status(403).json({ message: 'Access denied. Admin privileges required.' });
+    }
+
+    const users = await User.find({}).select('username email profilePicture about isAdmin createdAt');
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching users' });
+  }
+});
+
 module.exports = router; 

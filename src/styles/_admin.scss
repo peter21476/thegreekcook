@@ -1,0 +1,453 @@
+// =============================================================================
+// ADMIN STYLES
+// =============================================================================
+
+// Recipe Approval Styles
+.recipe-approval-container {
+  padding: $spacing-xl 0;
+
+  h2 {
+    color: $primary;
+    margin-bottom: $spacing-xl;
+    text-align: center;
+  }
+
+  .no-recipes {
+    text-align: center;
+    color: $text-light;
+    font-size: $font-size-lg;
+  }
+
+  .recipes-grid {
+    @include grid-auto-fit(300px, $spacing-xl);
+    padding: $spacing-md;
+  }
+
+  .recipe-card {
+    @include card-base;
+    @include card-hover;
+    overflow: hidden;
+
+    .recipe-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .recipe-content {
+      padding: $spacing-lg;
+
+      h3 {
+        color: $primary;
+        margin-bottom: $spacing-sm;
+      }
+
+      .submitted-by {
+        color: $text-light;
+        font-size: $font-size-sm;
+        margin-bottom: $spacing-md;
+      }
+
+      .description {
+        margin-bottom: $spacing-md;
+        line-height: 1.6;
+      }
+
+      .recipe-details {
+        background: $gray-50;
+        padding: $spacing-md;
+        border-radius: $border-radius-md;
+        margin-bottom: $spacing-md;
+
+        p {
+          margin: $spacing-sm 0;
+        }
+      }
+
+      .ingredients, .instructions {
+        margin-bottom: $spacing-md;
+
+        h4 {
+          color: $primary;
+          margin-bottom: $spacing-sm;
+        }
+
+        ul, ol {
+          padding-left: $spacing-lg;
+          margin: 0;
+
+          li {
+            margin-bottom: $spacing-sm;
+          }
+        }
+      }
+
+      .approval-actions {
+        display: flex;
+        gap: $spacing-md;
+        margin-top: $spacing-lg;
+
+        .btn {
+          flex: 1;
+          padding: $spacing-sm;
+          border: none;
+          border-radius: $border-radius-md;
+          font-weight: $font-weight-semibold;
+          cursor: pointer;
+          transition: all $transition-normal;
+
+          &.btn-success {
+            background-color: $success;
+            color: $white;
+
+            &:hover {
+              background-color: $success-hover;
+            }
+          }
+
+          &.btn-danger {
+            background-color: $danger;
+            color: $white;
+
+            &:hover {
+              background-color: $danger-hover;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .rejection-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: $z-index-modal-backdrop;
+
+    .modal-content {
+      background: $white;
+      padding: $spacing-xl;
+      border-radius: $border-radius-lg;
+      width: 90%;
+      max-width: 500px;
+
+      h3 {
+        color: $primary;
+        margin-bottom: $spacing-md;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: $spacing-sm;
+        border: 2px solid $gray-200;
+        border-radius: $border-radius-md;
+        margin: $spacing-md 0;
+        font-size: $font-size-base;
+        resize: vertical;
+
+        &:focus {
+          border-color: $primary;
+          box-shadow: 0 0 0 3px rgba($primary, 0.1);
+          outline: none;
+        }
+      }
+
+      .modal-actions {
+        display: flex;
+        gap: $spacing-md;
+        margin-top: $spacing-lg;
+
+        .btn {
+          flex: 1;
+          padding: $spacing-sm;
+          border: none;
+          border-radius: $border-radius-md;
+          font-weight: $font-weight-semibold;
+          cursor: pointer;
+          transition: all $transition-normal;
+
+          &.btn-danger {
+            background-color: $danger;
+            color: $white;
+
+            &:hover {
+              background-color: $danger-hover;
+            }
+          }
+
+          &.btn-secondary {
+            background-color: $gray-200;
+            color: $text;
+
+            &:hover {
+              background-color: $gray-300;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// User Management Styles
+.user-management-container {
+  padding: $spacing-xl 0;
+
+  h2 {
+    color: $primary;
+    margin-bottom: $spacing-sm;
+    text-align: center;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: $text-light;
+    margin-bottom: $spacing-xl;
+    font-size: $font-size-lg;
+  }
+
+  .controls-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $spacing-xl;
+    gap: $spacing-md;
+    flex-wrap: wrap;
+
+    .search-control {
+      flex: 1;
+      min-width: 300px;
+
+      .form-control {
+        width: 100%;
+        padding: $spacing-sm;
+        border: 2px solid $gray-200;
+        border-radius: $border-radius-md;
+        font-size: $font-size-base;
+
+        &:focus {
+          border-color: $primary;
+          box-shadow: 0 0 0 3px rgba($primary, 0.1);
+          outline: none;
+        }
+      }
+    }
+
+    .sort-controls {
+      display: flex;
+      gap: $spacing-md;
+
+      .form-control {
+        padding: $spacing-sm;
+        border: 2px solid $gray-200;
+        border-radius: $border-radius-md;
+        font-size: $font-size-base;
+        background: $white;
+
+        &:focus {
+          border-color: $primary;
+          box-shadow: 0 0 0 3px rgba($primary, 0.1);
+          outline: none;
+        }
+      }
+    }
+  }
+
+  .stats-section {
+    @include grid-auto-fit(200px, $spacing-lg);
+    margin-bottom: $spacing-xl;
+
+    .stat-card {
+      @include card-base;
+      padding: $spacing-lg;
+      text-align: center;
+
+      h3 {
+        color: $text-light;
+        font-size: $font-size-sm;
+        margin-bottom: $spacing-sm;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      p {
+        color: $primary;
+        font-size: $font-size-3xl;
+        font-weight: $font-weight-bold;
+        margin: 0;
+      }
+    }
+  }
+
+  .no-users {
+    text-align: center;
+    color: $text-light;
+    font-size: $font-size-lg;
+    padding: $spacing-xl;
+  }
+
+  .users-table-container {
+    @include card-base;
+    overflow: hidden;
+
+    .users-table {
+      width: 100%;
+      border-collapse: collapse;
+
+      th, td {
+        padding: $spacing-md;
+        text-align: left;
+        border-bottom: 1px solid $gray-200;
+      }
+
+      th {
+        background: $gray-50;
+        font-weight: $font-weight-semibold;
+        color: $text;
+        text-transform: uppercase;
+        font-size: $font-size-sm;
+        letter-spacing: 0.05em;
+      }
+
+      tr {
+        transition: background-color $transition-normal;
+
+        &:hover {
+          background-color: $gray-50;
+        }
+
+        &.admin-row {
+          background-color: rgba($warning, 0.1);
+
+          &:hover {
+            background-color: rgba($warning, 0.2);
+          }
+        }
+      }
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: $spacing-md;
+
+        .user-avatar {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          overflow: hidden;
+          flex-shrink: 0;
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+
+          .avatar-placeholder {
+            width: 100%;
+            height: 100%;
+            background: $primary;
+            color: $white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: $font-weight-semibold;
+            font-size: $font-size-lg;
+          }
+        }
+
+        .user-details {
+          display: flex;
+          flex-direction: column;
+          gap: $spacing-xs;
+
+          .admin-badge {
+            background: $warning;
+            color: $white;
+            padding: $spacing-xs $spacing-sm;
+            border-radius: $border-radius-sm;
+            font-size: $font-size-xs;
+            font-weight: $font-weight-semibold;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            align-self: flex-start;
+          }
+        }
+      }
+
+      .role-badge {
+        padding: $spacing-sm $spacing-md;
+        border-radius: $border-radius-md;
+        font-size: $font-size-sm;
+        font-weight: $font-weight-semibold;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+
+        &.admin {
+          background: rgba($warning, 0.2);
+          color: $warning-hover;
+        }
+
+        &.user {
+          background: rgba($info, 0.2);
+          color: $info-hover;
+        }
+      }
+
+      .about-text {
+        max-width: 200px;
+
+        .no-about {
+          color: $text-light;
+          font-style: italic;
+        }
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@include mobile {
+  .recipe-approval-container {
+    .recipes-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .approval-actions {
+      flex-direction: column;
+    }
+  }
+  
+  .user-management-container {
+    .controls-section {
+      flex-direction: column;
+      align-items: stretch;
+      
+      .search-control {
+        min-width: auto;
+      }
+      
+      .sort-controls {
+        justify-content: space-between;
+      }
+    }
+    
+    .stats-section {
+      grid-template-columns: 1fr;
+    }
+    
+    .users-table-container {
+      overflow-x: auto;
+      
+      .users-table {
+        min-width: 600px;
+      }
+    }
+  }
+}

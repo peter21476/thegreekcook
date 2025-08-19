@@ -847,6 +847,30 @@ h1, h2, h3, h4, h5, h6 {
       background-color: rgba(74, 144, 226, 0.1);
     }
   }
+
+  .admin-links {
+    display: flex;
+    gap: 0.5rem;
+    margin: 0 0.5rem;
+    padding: 0 0.5rem;
+    border-left: 1px solid #e2e8f0;
+    border-right: 1px solid #e2e8f0;
+
+    .admin-link {
+      color: #f59e0b;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      background: rgba(245, 158, 11, 0.1);
+      transition: all 0.2s;
+
+      &:hover {
+        background: rgba(245, 158, 11, 0.2);
+        color: #d97706;
+      }
+    }
+  }
 }
 
 .favorite-btn {
@@ -1051,10 +1075,7 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-.footer-custom {
-  padding-top: 4rem;
-  padding-bottom: 1.5rem;
-}
+// Footer styles are now in _layout.scss
 
 .main-wrapper {
   min-height: 100vh;
@@ -1425,6 +1446,229 @@ main {
   }
 }
 
+// User Management Styles
+.user-management-container {
+  padding: 2rem 0;
+
+  h2 {
+    color: $primary;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: $text-light;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+  }
+
+  .controls-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    .search-control {
+      flex: 1;
+      min-width: 300px;
+
+      .form-control {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 1rem;
+
+        &:focus {
+          border-color: $primary;
+          box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+          outline: none;
+        }
+      }
+    }
+
+    .sort-controls {
+      display: flex;
+      gap: 1rem;
+
+      .form-control {
+        padding: 0.75rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 1rem;
+        background: $white;
+
+        &:focus {
+          border-color: $primary;
+          box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+          outline: none;
+        }
+      }
+    }
+  }
+
+  .stats-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+
+    .stat-card {
+      background: $white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      text-align: center;
+
+      h3 {
+        color: $text-light;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      p {
+        color: $primary;
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0;
+      }
+    }
+  }
+
+  .no-users {
+    text-align: center;
+    color: $text-light;
+    font-size: 1.1rem;
+    padding: 2rem;
+  }
+
+  .users-table-container {
+    background: $white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+
+    .users-table {
+      width: 100%;
+      border-collapse: collapse;
+
+      th, td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      th {
+        background: #f8fafc;
+        font-weight: 600;
+        color: $text;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 0.05em;
+      }
+
+      tr {
+        transition: background-color 0.2s ease-in-out;
+
+        &:hover {
+          background-color: #f8fafc;
+        }
+
+        &.admin-row {
+          background-color: #fef3c7;
+
+          &:hover {
+            background-color: #fde68a;
+          }
+        }
+      }
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        .user-avatar {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          overflow: hidden;
+          flex-shrink: 0;
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+
+          .avatar-placeholder {
+            width: 100%;
+            height: 100%;
+            background: $primary;
+            color: $white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.2rem;
+          }
+        }
+
+        .user-details {
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+
+          .admin-badge {
+            background: #f59e0b;
+            color: $white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            align-self: flex-start;
+          }
+        }
+      }
+
+      .role-badge {
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+
+        &.admin {
+          background: #fef3c7;
+          color: #92400e;
+        }
+
+        &.user {
+          background: #dbeafe;
+          color: #1e40af;
+        }
+      }
+
+      .about-text {
+        max-width: 200px;
+
+        .no-about {
+          color: $text-light;
+          font-style: italic;
+        }
+      }
+    }
+  }
+}
+
 .profile-picture-section {
   display: flex;
   justify-content: center;
@@ -1662,6 +1906,102 @@ main {
 
         &:last-child {
           margin-bottom: 0;
+        }
+      }
+    }
+  }
+}
+
+// Responsive styles for public profile
+@media (max-width: 768px) {
+  .public-profile-container {
+    padding: 1rem;
+
+    .profile-header {
+      flex-direction: column;
+      text-align: center;
+      gap: 1.5rem;
+      padding: 1.5rem;
+
+      .profile-avatar {
+        img, .profile-placeholder {
+          width: 100px;
+          height: 100px;
+        }
+      }
+
+      .profile-info {
+        h1 {
+          font-size: 1.5rem;
+        }
+
+        .stats {
+          justify-content: center;
+          gap: 1.5rem;
+        }
+      }
+    }
+
+    .profile-tabs {
+      flex-direction: column;
+      gap: 0.5rem;
+
+      .tab-button {
+        width: 100%;
+        text-align: center;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 0.5rem;
+
+        &.active::after {
+          display: none;
+        }
+      }
+    }
+
+    .recipes-section {
+      .recipes-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+    }
+
+    .about-section {
+      .about-card {
+        padding: 1.5rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .public-profile-container {
+    padding: 0.5rem;
+
+    .profile-header {
+      padding: 1rem;
+
+      .profile-avatar {
+        img, .profile-placeholder {
+          width: 80px;
+          height: 80px;
+        }
+      }
+
+      .profile-info {
+        h1 {
+          font-size: 1.25rem;
+        }
+
+        .stats {
+          flex-direction: column;
+          gap: 1rem;
+
+          .stat {
+            .stat-number {
+              font-size: 1.25rem;
+            }
+          }
         }
       }
     }
