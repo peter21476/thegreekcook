@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import parse from 'html-react-parser';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChartPie, faClock, faHeart, faHeartBroken } from "@fortawesome/free-solid-svg-icons";
+import { faChartPie, faClock } from "@fortawesome/free-solid-svg-icons";
 import {Link} from 'react-router-dom';
 import {Helmet} from 'react-helmet';
 import { API_CONFIG } from '../config';
@@ -236,7 +236,9 @@ function RecipeDetails() {
                                             onClick={toggleFavorite} 
                                             className={`favorite-btn ${isFavorite ? 'favorited' : ''}`}
                                         >
-                                            <FontAwesomeIcon icon={isFavorite ? faHeart : faHeartBroken} />
+                                            <span className="favorite-icon">
+                                                {isFavorite ? '⭐' : '☆'}
+                                            </span>
                                             {isFavorite ? ' Remove from Favorites' : ' Add to Favorites'}
                                         </button>
                                         {error && <div className="error-message">{error}</div>}

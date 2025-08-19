@@ -1,18 +1,48 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,700;0,800;1,300;1,400;1,700;1,800&family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
 
-// Modern color palette
-$primary: #2563eb;
-$secondary: #f59e0b;
-$accent: #3b82f6;
-$background: #f8fafc;
-$text: #1e293b;
-$text-light: #64748b;
-$white: #ffffff;
-
 body {
   background: $background;
   color: $text;
   line-height: 1.6;
+}
+
+// Add warm beige background for certain sections
+.recipe-details {
+  background: $background-alt;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+// Update recipe wrapper styling with new colors
+.recipe-wrapper {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  height: 100%;
+  background: $white;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+
+  .recipe-image {
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 240px;
+    border-radius: 12px 12px 0 0;
+  }
+
+  h5 {
+    color: $primary;
+    font-weight: 700;
+    margin: 1rem 0;
+  }
 }
 
 p, td, li, a, span {
@@ -106,7 +136,7 @@ h1, h2, h3, h4, h5, h6 {
     
     &:focus {
       border-color: $secondary;
-      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+      box-shadow: 0 0 0 3px rgba(112, 141, 35, 0.1);
     }
   }
 }
@@ -121,7 +151,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   
   &:hover {
-    background-color: darken($primary, 10%);
+    background-color: $primary-hover;
     transform: translateY(-1px);
   }
 }
@@ -173,8 +203,8 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 2rem;
   
   h4 {
-    color: $primary;
-    border-bottom: 2px solid #e2e8f0;
+    color: $secondary;
+    border-bottom: 2px solid $secondary;
     padding-bottom: 1rem;
     margin-bottom: 1.5rem;
   }
@@ -194,7 +224,7 @@ h1, h2, h3, h4, h5, h6 {
     
     &:before {
       content: "•";
-      color: $secondary;
+      color: $accent;
       position: absolute;
       left: 0;
     }
@@ -242,7 +272,7 @@ h1, h2, h3, h4, h5, h6 {
   padding-top: 3rem;
   
   h2 {
-    color: $text;
+    color: $primary;
     text-shadow: none;
     padding-bottom: 1.5rem;
     font-size: 2rem;
@@ -281,7 +311,7 @@ h1, h2, h3, h4, h5, h6 {
     transition: all 0.2s ease-in-out;
     
     &:hover {
-      background-color: darken($secondary, 10%);
+      background-color: $secondary-hover;
       transform: translateY(-1px);
     }
   }
@@ -303,7 +333,7 @@ h1, h2, h3, h4, h5, h6 {
     
     &:focus {
       border-color: $primary;
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      box-shadow: 0 0 0 3px rgba(13, 59, 102, 0.1);
     }
   }
 }
@@ -448,8 +478,8 @@ h1, h2, h3, h4, h5, h6 {
     gap: 5px;
     
     .badge {
-      background-color: $primary;
-      color: $white;
+      background-color: $lemon-yellow;
+      color: $text;
       padding: 4px 8px;
       border-radius: 12px;
       font-size: 0.75rem;
@@ -513,8 +543,8 @@ h1, h2, h3, h4, h5, h6 {
     margin-left: 1rem;
     
     .badge {
-      background-color: $primary;
-      color: $white;
+      background-color: $lemon-yellow;
+      color: $text;
       padding: 6px 12px;
       border-radius: 16px;
       font-size: 0.8rem;
@@ -618,7 +648,7 @@ h1, h2, h3, h4, h5, h6 {
         &:focus {
           outline: none;
           border-color: $primary;
-          box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+          box-shadow: 0 0 0 3px rgba(13, 59, 102, 0.1);
         }
       }
     }
@@ -689,7 +719,7 @@ h1, h2, h3, h4, h5, h6 {
     
     &:hover {
       border-color: $primary;
-      background-color: rgba(34, 197, 94, 0.05);
+      background-color: rgba(13, 59, 102, 0.05);
     }
   }
   
@@ -796,7 +826,7 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
 
   .auth-link {
-    color: #4a90e2;
+    color: $primary;
     text-decoration: none;
     font-weight: 500;
     padding: 0.5rem 1rem;
@@ -807,7 +837,7 @@ h1, h2, h3, h4, h5, h6 {
     gap: 0.5rem;
 
     &:hover {
-      background-color: rgba(74, 144, 226, 0.1);
+      background-color: rgba(13, 59, 102, 0.1);
     }
 
     &.profile-link {
@@ -827,7 +857,7 @@ h1, h2, h3, h4, h5, h6 {
 
       &:hover {
         .header-profile-picture {
-          border-color: #4a90e2;
+          border-color: $primary;
         }
       }
     }
@@ -838,13 +868,13 @@ h1, h2, h3, h4, h5, h6 {
     border: none;
     cursor: pointer;
     font-size: 1rem;
-    color: #4a90e2;
+    color: $primary;
     padding: 0.5rem 1rem;
     border-radius: 4px;
     transition: background-color 0.2s;
 
     &:hover {
-      background-color: rgba(74, 144, 226, 0.1);
+      background-color: rgba(13, 59, 102, 0.1);
     }
   }
 
@@ -857,17 +887,17 @@ h1, h2, h3, h4, h5, h6 {
     border-right: 1px solid #e2e8f0;
 
     .admin-link {
-      color: #f59e0b;
+      color: $lemon-yellow;
       font-weight: 600;
       font-size: 0.9rem;
       padding: 0.4rem 0.8rem;
       border-radius: 6px;
-      background: rgba(245, 158, 11, 0.1);
+      background: rgba(247, 184, 1, 0.1);
       transition: all 0.2s;
 
       &:hover {
-        background: rgba(245, 158, 11, 0.2);
-        color: #d97706;
+        background: rgba(247, 184, 1, 0.2);
+        color: $warning-hover;
       }
     }
   }
@@ -887,8 +917,8 @@ h1, h2, h3, h4, h5, h6 {
   gap: 0.5rem;
 
   &:hover {
-    background-color: rgba(74, 144, 226, 0.1);
-    color: #4a90e2;
+    background-color: rgba(13, 59, 102, 0.1);
+    color: $primary;
   }
 
   &.favorited {
@@ -924,7 +954,7 @@ h1, h2, h3, h4, h5, h6 {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #4a90e2;
+  background: $primary;
   margin: -4px 0 0 -4px;
 }
 
@@ -1129,7 +1159,7 @@ main {
 
         &:focus {
           border-color: $primary;
-          box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+          box-shadow: 0 0 0 3px rgba(13, 59, 102, 0.1);
           outline: none;
         }
       }
@@ -1223,7 +1253,7 @@ main {
         color: white;
 
         &:hover:not(:disabled) {
-          background-color: darken($primary, 10%);
+          background-color: $primary-hover;
           transform: translateY(-1px);
         }
 
@@ -1404,7 +1434,7 @@ main {
 
         &:focus {
           border-color: $primary;
-          box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+          box-shadow: 0 0 0 3px rgba(13, 59, 102, 0.1);
           outline: none;
         }
       }
@@ -1484,7 +1514,7 @@ main {
 
         &:focus {
           border-color: $primary;
-          box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+          box-shadow: 0 0 0 3px rgba(13, 59, 102, 0.1);
           outline: none;
         }
       }
@@ -1503,7 +1533,7 @@ main {
 
         &:focus {
           border-color: $primary;
-          box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+          box-shadow: 0 0 0 3px rgba(13, 59, 102, 0.1);
           outline: none;
         }
       }
@@ -1580,10 +1610,10 @@ main {
         }
 
         &.admin-row {
-          background-color: #fef3c7;
+          background-color: rgba(247, 184, 1, 0.1);
 
           &:hover {
-            background-color: #fde68a;
+            background-color: rgba(247, 184, 1, 0.2);
           }
         }
       }
@@ -1647,13 +1677,13 @@ main {
         letter-spacing: 0.05em;
 
         &.admin {
-          background: #fef3c7;
-          color: #92400e;
+          background: rgba(247, 184, 1, 0.2);
+          color: $text;
         }
 
         &.user {
-          background: #dbeafe;
-          color: #1e40af;
+          background: rgba(13, 59, 102, 0.1);
+          color: $primary;
         }
       }
 
@@ -2041,18 +2071,18 @@ main {
     text-decoration: none;
 
     &:hover {
-      border-color: #fca5a5;
-      color: #ef4444;
+      border-color: $accent;
+      color: $accent;
       transform: translateY(-1px);
     }
 
     &.liked {
-      border-color: #ef4444;
-      color: #ef4444;
-      background-color: #fef2f2;
+      border-color: $accent;
+      color: $accent;
+      background-color: rgba(224, 122, 95, 0.1);
 
       &:hover {
-        background-color: #fee2e2;
+        background-color: rgba(224, 122, 95, 0.2);
       }
     }
 
@@ -2067,6 +2097,11 @@ main {
 
     .like-count {
       font-weight: 700;
+      color: $text;
+    }
+
+    &.liked .like-count {
+      color: $text;
     }
 
     .loading-spinner {
@@ -2134,18 +2169,24 @@ main {
   text-decoration: none;
 
   &:hover {
-    border-color: #fca5a5;
-    color: #ef4444;
+    border-color: $accent;
+    color: $accent;
     transform: translateY(-1px);
   }
 
   &.favorited {
-    border-color: #ef4444;
-    color: #ef4444;
-    background-color: #fef2f2;
+    border-color: $accent;
+    color: $accent;
+    background-color: rgba(224, 122, 95, 0.1);
 
     &:hover {
-      background-color: #fee2e2;
+      background-color: rgba(224, 122, 95, 0.2);
     }
   }
+}
+
+// Favorite icon styling
+.favorite-icon {
+  font-size: 1.1rem;
+  margin-right: 0.5rem;
 }

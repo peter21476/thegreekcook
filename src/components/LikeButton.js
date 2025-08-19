@@ -101,10 +101,10 @@ const LikeButton = ({ recipeId, initialLikeCount = 0, onLikeChange }) => {
         onClick={handleLikeToggle}
         disabled={loading}
         className={`like-button ${isLiked ? 'liked' : ''} ${loading ? 'loading' : ''}`}
-        title={isLoggedIn ? (isLiked ? 'Unlike this recipe' : 'Like this recipe') : 'Login to like recipes'}
+        title={isLoggedIn ? (isLiked ? 'Remove from favorites' : 'Add to favorites') : 'Login to save recipes'}
       >
         <span className="like-icon">
-          {isLiked ? '❤️' : '🤍'}
+          {isLiked ? '🫒' : '🌿'}
         </span>
         <span className="like-count">{likeCount}</span>
         {loading && <span className="loading-spinner">⏳</span>}

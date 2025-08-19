@@ -1,13 +1,21 @@
-$primary: #007bff;
+// Import the main variables to use the new Greek-inspired color scheme
+@import '../../styles/variables';
+
+// Override with Greek-inspired colors for auth components
+$primary: #0D3B66; // Aegean Blue
+$secondary: #708D23; // Olive Green
+$accent: #E07A5F; // Terracotta
+$lemon-yellow: #F7B801; // Lemon Yellow
+$warm-beige: #F4E1C1; // Warm Beige
 $white: #ffffff;
-$text: #333333;
-$text-light: #666666;
+$text: #1e293b;
+$text-light: #64748b;
 
 .auth-container {
   max-width: 400px;
   margin: 4rem auto;
   padding: 2rem;
-  background-color: #fff;
+  background-color: $white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: relative;
@@ -15,7 +23,7 @@ $text-light: #666666;
 
   h2 {
     text-align: center;
-    color: #333;
+    color: $primary;
     margin-bottom: 1.5rem;
   }
 }
@@ -33,7 +41,7 @@ $text-light: #666666;
 
   label {
     font-weight: 500;
-    color: #555;
+    color: $text;
   }
 
   input {
@@ -44,13 +52,14 @@ $text-light: #666666;
 
     &:focus {
       outline: none;
-      border-color: #4a90e2;
+      border-color: $primary;
+      box-shadow: 0 0 0 3px rgba(13, 59, 102, 0.1);
     }
   }
 }
 
 .auth-button {
-  background-color: #4a90e2;
+  background-color: $primary;
   color: white;
   padding: 0.75rem;
   border: none;
@@ -60,7 +69,7 @@ $text-light: #666666;
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: #357abd;
+    background-color: $primary-hover;
   }
 
   &:disabled {
@@ -72,14 +81,14 @@ $text-light: #666666;
 .auth-form-links {
   text-align: center;
   margin-top: 1rem;
-  color: #666;
+  color: $text-light;
 
   p {
     margin: 0.5rem 0;
   }
 
   a {
-    color: #4a90e2;
+    color: $primary;
     text-decoration: none;
 
     &:hover {
@@ -91,14 +100,14 @@ $text-light: #666666;
 .auth-links {
   text-align: center;
   margin-top: 1rem;
-  color: #666;
+  color: $text-light;
 
   p {
     margin: 0.5rem 0;
   }
 
   a {
-    color: #4a90e2;
+    color: $primary;
     text-decoration: none;
 
     &:hover {
@@ -110,10 +119,10 @@ $text-light: #666666;
 .auth-link {
   text-align: center;
   margin-top: 1rem;
-  color: #666;
+  color: $text-light;
 
   a {
-    color: #4a90e2;
+    color: $primary;
     text-decoration: none;
 
     &:hover {
@@ -165,7 +174,7 @@ $text-light: #666666;
   }
 
   .profile-info {
-    background: $white;
+    background: $warm-beige;
     border-radius: 12px;
     padding: 2rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
@@ -175,17 +184,17 @@ $text-light: #666666;
     margin-bottom: 2rem;
 
     h3 {
-      color: $primary;
+      color: $secondary;
       margin-bottom: 1rem;
       padding-bottom: 0.5rem;
-      border-bottom: 2px solid #e2e8f0;
+      border-bottom: 2px solid $secondary;
     }
   }
 
   .admin-badge {
     display: inline-block;
-    background-color: $primary;
-    color: white;
+    background-color: $lemon-yellow;
+    color: $text;
     padding: 0.25rem 0.75rem;
     border-radius: 9999px;
     font-size: 0.875rem;
@@ -213,17 +222,18 @@ $text-light: #666666;
         color: white;
 
         &:hover {
-          background-color: darken($primary, 10%);
+          background-color: $primary-hover;
           transform: translateY(-1px);
         }
       }
 
       &.btn-secondary {
-        background-color: #e2e8f0;
-        color: $text;
+        background-color: $secondary;
+        color: white;
 
         &:hover {
-          background-color: #cbd5e1;
+          background-color: $secondary-hover;
+          transform: translateY(-1px);
         }
       }
     }
@@ -233,7 +243,7 @@ $text-light: #666666;
     display: flex;
     gap: 1rem;
     margin-bottom: 2rem;
-    border-bottom: 2px solid #e2e8f0;
+    border-bottom: 2px solid $secondary;
     padding-bottom: 1rem;
 
     .tab-button {
@@ -248,11 +258,11 @@ $text-light: #666666;
       position: relative;
 
       &:hover {
-        color: $primary;
+        color: $secondary;
       }
 
       &.active {
-        color: $primary;
+        color: $secondary;
 
         &::after {
           content: '';
@@ -261,7 +271,7 @@ $text-light: #666666;
           left: 0;
           right: 0;
           height: 2px;
-          background-color: $primary;
+          background-color: $secondary;
         }
       }
     }
@@ -275,14 +285,16 @@ $text-light: #666666;
   }
 
   .favorite-recipe, .submitted-recipe {
-    background-color: #f8f9fa;
+    background-color: $white;
     border-radius: 8px;
     overflow: hidden;
     transition: transform 0.2s;
     position: relative;
+    border: 2px solid $secondary;
 
     &:hover {
       transform: translateY(-4px);
+      border-color: $accent;
     }
 
     img {
@@ -295,7 +307,7 @@ $text-light: #666666;
       padding: 1rem;
       margin: 0;
       font-size: 1rem;
-      color: $text;
+      color: $primary;
     }
   }
 
@@ -305,7 +317,7 @@ $text-light: #666666;
     right: 8px;
     width: 24px;
     height: 24px;
-    background-color: rgba(220, 53, 69, 0.9);
+    background-color: rgba(224, 122, 95, 0.9);
     color: white;
     border: none;
     border-radius: 50%;
@@ -319,7 +331,7 @@ $text-light: #666666;
     z-index: 10;
 
     &:hover {
-      background-color: #dc3545;
+      background-color: $accent;
       transform: scale(1.1);
     }
   }
@@ -334,15 +346,15 @@ $text-light: #666666;
         margin: 0.5rem 0;
 
         &.pending {
-          color: #f59e0b;
+          color: $lemon-yellow;
         }
 
         &.approved {
-          color: #10b981;
+          color: $secondary;
         }
 
         &.rejected {
-          color: #ef4444;
+          color: $accent;
         }
       }
 
@@ -381,11 +393,11 @@ $text-light: #666666;
           }
 
           &.btn-secondary {
-            background-color: #f59e0b;
+            background-color: $accent;
             color: white;
 
             &:hover {
-              background-color: #d97706;
+              background-color: $accent-hover;
               transform: translateY(-1px);
             }
           }
@@ -405,14 +417,14 @@ $text-light: #666666;
     transition: background-color 0.2s;
 
     &:hover {
-      background-color: darken($primary, 10%);
+      background-color: $primary-hover;
     }
   }
 
 
 
   .logout-button {
-    background-color: #dc3545;
+    background-color: $accent;
     color: white;
     padding: 0.5rem 1rem;
     border: none;
@@ -424,7 +436,7 @@ $text-light: #666666;
     display: inline-block;
 
     &:hover {
-      background-color: #c82333;
+      background-color: $accent-hover;
     }
   }
 
@@ -442,7 +454,7 @@ $text-light: #666666;
 }
 
 .login-box {
-  background-color: #fff;
+  background-color: $white;
   border-radius: 12px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   padding: 2rem;
@@ -454,7 +466,7 @@ $text-light: #666666;
   }
 
   h3 {
-    color: #2563eb;
+    color: $primary;
     font-size: 1.5rem;
     margin-bottom: 0.5rem;
     text-align: center;
@@ -491,8 +503,8 @@ $text-light: #666666;
 
       &:focus {
         outline: none;
-        border-color: #2563eb;
-        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        border-color: $primary;
+        box-shadow: 0 0 0 3px rgba(13, 59, 102, 0.1);
       }
 
       &::placeholder {
@@ -503,7 +515,7 @@ $text-light: #666666;
 
   .auth-button {
     width: 100%;
-    background-color: #2563eb;
+    background-color: $primary;
     color: white;
     padding: 0.75rem;
     border: none;
@@ -515,7 +527,7 @@ $text-light: #666666;
     margin-top: 1rem;
 
     &:hover {
-      background-color: #1d4ed8;
+      background-color: $primary-hover;
       transform: translateY(-1px);
     }
 
@@ -529,11 +541,11 @@ $text-light: #666666;
   .auth-link {
     text-align: center;
     margin-top: 1.5rem;
-    color: #64748b;
+    color: $text-light;
     font-size: 0.95rem;
 
     a {
-      color: #2563eb;
+      color: $primary;
       text-decoration: none;
       font-weight: 500;
 
@@ -583,14 +595,14 @@ $text-light: #666666;
     }
 
     .profile-btn {
-      background-color: #2563eb;
+      background-color: $primary;
     }
 
     .logout-btn {
-      background-color: #ef4444;
+      background-color: $accent;
 
       &:hover {
-        background-color: #dc2626;
+        background-color: $accent-hover;
       }
     }
   }
@@ -616,7 +628,7 @@ $text-light: #666666;
     transition: all 0.3s ease;
 
     &:hover {
-      border-color: #2563eb;
+      border-color: $primary;
     }
 
     img {
@@ -653,11 +665,11 @@ $text-light: #666666;
         transition: all 0.2s ease;
 
         &.btn-primary {
-          background-color: #2563eb;
+          background-color: $primary;
           color: white;
 
           &:hover {
-            background-color: #1d4ed8;
+            background-color: $primary-hover;
           }
 
           &:disabled {
@@ -667,11 +679,11 @@ $text-light: #666666;
         }
 
         &.btn-danger {
-          background-color: #ef4444;
+          background-color: $accent;
           color: white;
 
           &:hover {
-            background-color: #dc2626;
+            background-color: $accent-hover;
           }
 
           &:disabled {
@@ -697,8 +709,8 @@ $text-light: #666666;
     background-color: #f8fafc;
 
     &:hover {
-      border-color: #2563eb;
-      background-color: #eff6ff;
+      border-color: $primary;
+      background-color: rgba(13, 59, 102, 0.05);
     }
 
     .profile-picture-icon {
@@ -742,8 +754,8 @@ $text-light: #666666;
 
     &:focus {
       outline: none;
-      border-color: #2563eb;
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      border-color: $primary;
+      box-shadow: 0 0 0 3px rgba(13, 59, 102, 0.1);
     }
 
     &::placeholder {
@@ -771,12 +783,12 @@ $text-light: #666666;
 
 .about-display {
   .about-text {
-    background-color: #f8fafc;
+    background-color: $warm-beige;
     padding: 1rem;
     border-radius: 8px;
-    border-left: 4px solid #2563eb;
+    border-left: 4px solid $secondary;
     line-height: 1.6;
-    color: #1e293b;
+    color: $text;
     margin-bottom: 1rem;
     white-space: pre-wrap;
   }

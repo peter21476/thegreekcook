@@ -321,8 +321,8 @@
   
   .like-button {
     background: none;
-    border: 2px solid $primary;
-    color: $primary;
+    border: 2px solid $accent;
+    color: $accent;
     padding: $spacing-sm $spacing-md;
     border-radius: $border-radius-md;
     cursor: pointer;
@@ -333,13 +333,15 @@
     gap: $spacing-xs;
     
     &:hover {
-      background: $primary;
+      background: $accent;
       color: $white;
+      transform: translateY(-1px);
     }
     
     &.liked {
-      background: $primary;
+      background: $accent;
       color: $white;
+      box-shadow: 0 2px 4px rgba(224, 122, 95, 0.3);
     }
     
     .like-icon {
@@ -353,7 +355,7 @@
   }
   
   .like-button.liked .like-count {
-    color: $white;
+    color: $text;
   }
 }
 
@@ -391,15 +393,15 @@
   gap: $spacing-sm;
   
   &:hover {
-    background-color: rgba($info, 0.1);
-    color: $info;
+    background-color: rgba($accent, 0.1);
+    color: $accent;
   }
   
   &.favorited {
-    color: $danger;
+    color: $accent;
     
     &:hover {
-      background-color: rgba($danger, 0.1);
+      background-color: rgba($accent, 0.1);
     }
   }
   

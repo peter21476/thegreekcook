@@ -2,24 +2,31 @@
 // VARIABLES
 // =============================================================================
 
-// Modern color palette
-$primary: #2563eb;
-$secondary: #f59e0b;
-$accent: #3b82f6;
-$background: #f8fafc;
-$text: #1e293b;
-$text-light: #64748b;
+// Greek-inspired color palette
+$primary: #0D3B66; // Aegean Blue - headers, navigation, call-to-action buttons
+$secondary: #708D23; // Olive Green - highlights, category labels, icons
+$accent: #E07A5F; // Terracotta - buttons, section dividers
+$background: #FFFFFF; // White - main backgrounds
+$background-alt: #F4E1C1; // Warm Beige - background sections behind text
+$text: #1e293b; // Dark text
+$text-light: #64748b; // Light text
 $white: #ffffff;
+
+// Hover and interactive colors
+$primary-hover: #0A2E4F; // Darker Aegean Blue for hover states
+$secondary-hover: #5A7A1C; // Darker Olive Green for hover states
+$accent-hover: #D06A4A; // Darker Terracotta for hover states
+$lemon-yellow: #F7B801; // Lemon Yellow - hover states, recipe badges
 
 // Additional colors
 $success: #10b981;
 $success-hover: #059669;
 $danger: #ef4444;
 $danger-hover: #dc2626;
-$warning: #f59e0b;
-$warning-hover: #d97706;
-$info: #3b82f6;
-$info-hover: #2563eb;
+$warning: #F7B801; // Using Lemon Yellow for warnings
+$warning-hover: #E5A800;
+$info: #0D3B66; // Using Aegean Blue for info
+$info-hover: #0A2E4F;
 
 // Gray scale
 $gray-50: #f8fafc;
