@@ -115,6 +115,8 @@ function Header() {
                             <div className="admin-links">
                                 <Link to="/admin/recipes" className="auth-link admin-link">Recipe Approval</Link>
                                 <Link to="/admin/users" className="auth-link admin-link">User Management</Link>
+                                <Link to="/admin/seo" className="auth-link admin-link">SEO Tools</Link>
+                                <Link to="/admin/analytics" className="auth-link admin-link">Analytics</Link>
                             </div>
                         )}
                         <button onClick={handleLogout} className="auth-link logout-btn">Logout</button>
