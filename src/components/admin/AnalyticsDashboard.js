@@ -37,7 +37,8 @@ const AnalyticsDashboard = () => {
         const data = await response.json();
         setStats(data);
       } else {
-        setError('Failed to fetch statistics');
+        const errorData = await response.json();
+        setError(`Failed to fetch statistics: ${errorData.message || 'Unknown error'}`);
       }
     } catch (error) {
       console.error('Error fetching stats:', error);

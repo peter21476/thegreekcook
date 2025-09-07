@@ -6,6 +6,7 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const recipeRoutes = require('./routes/recipe');
 const uploadRoutes = require('./routes/upload');
+const adminRoutes = require('./routes/admin');
 const path = require('path');
 
 const app = express();
@@ -32,6 +33,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/recipes', recipeRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Serve static files from the React build directory
 app.use(express.static(path.join(__dirname, '../../build')));
