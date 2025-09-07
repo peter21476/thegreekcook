@@ -17,8 +17,8 @@ Allow: /result-item/
 # Crawl delay (optional - be respectful to server)
 Crawl-delay: 1
 
-# Sitemap location (you'll need to create this)
-Sitemap: https://yourdomain.com/sitemap.xml
+# Sitemap location
+Sitemap: https://zorbaskitchen.com/sitemap.xml
 
 # Additional user agents
 User-agent: Googlebot
