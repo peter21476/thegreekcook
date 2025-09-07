@@ -170,9 +170,11 @@ const Register = () => {
           {loading ? 'Registering...' : success ? 'Success!' : 'Register'}
         </button>
       </form>
-      <p className="auth-link">
-        Already have an account? <Link to="/login">Login here</Link>
-      </p>
+      <div className="auth-form-links">
+        <p>
+          Already have an account? <Link to="/login">Login here</Link>
+        </p>
+      </div>
     </div>
   );
 };

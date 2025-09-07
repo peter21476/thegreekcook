@@ -80,52 +80,44 @@ $text-light: #64748b;
 
 .auth-form-links {
   text-align: center;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
   color: $text-light;
+  font-size: 0.95rem;
 
   p {
-    margin: 0.5rem 0;
+    margin: 0.75rem 0;
+    line-height: 1.5;
   }
 
   a {
     color: $primary;
     text-decoration: none;
+    font-weight: 500;
+    transition: color $transition-normal;
 
     &:hover {
+      color: $primary-hover;
       text-decoration: underline;
     }
   }
 }
 
-.auth-links {
-  text-align: center;
-  margin-top: 1rem;
-  color: $text-light;
-
-  p {
-    margin: 0.5rem 0;
-  }
-
-  a {
-    color: $primary;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-}
-
+// Consolidated auth link styles for single links (legacy support)
 .auth-link {
   text-align: center;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
   color: $text-light;
+  font-size: 0.95rem;
+  line-height: 1.5;
 
   a {
     color: $primary;
     text-decoration: none;
+    font-weight: 500;
+    transition: color $transition-normal;
 
     &:hover {
+      color: $primary-hover;
       text-decoration: underline;
     }
   }
@@ -538,18 +530,25 @@ $text-light: #64748b;
     }
   }
 
-  .auth-link {
+  .auth-form-links {
     text-align: center;
     margin-top: 1.5rem;
     color: $text-light;
     font-size: 0.95rem;
 
+    p {
+      margin: 0.75rem 0;
+      line-height: 1.5;
+    }
+
     a {
       color: $primary;
       text-decoration: none;
       font-weight: 500;
+      transition: color $transition-normal;
 
       &:hover {
+        color: $primary-hover;
         text-decoration: underline;
       }
     }

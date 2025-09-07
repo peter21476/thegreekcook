@@ -141,7 +141,7 @@ const ResetPassword = () => {
         </button>
       </form>
       
-      <div className="auth-links">
+      <div className="auth-form-links">
         <p>
           <Link to="/login">Back to Login</Link>
         </p>
