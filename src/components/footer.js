@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInstagram } from '@fortawesome/free-brands-svg-icons';
+import { faInstagram, faPinterest } from '@fortawesome/free-brands-svg-icons';
 
 function Footer() {
     const currentYear = new Date().getFullYear();
@@ -28,6 +28,9 @@ function Footer() {
                         <div className="social-links">
                             <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
                                 <FontAwesomeIcon icon={faInstagram} />
+                            </a>
+                            <a href="https://www.pinterest.com/zorbaskitchen/" target="_blank" rel="noopener noreferrer">
+                                <FontAwesomeIcon icon={faPinterest} />
                             </a>
                         </div>
                     </div>
