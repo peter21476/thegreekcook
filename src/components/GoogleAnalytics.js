@@ -42,7 +42,9 @@ const GoogleAnalytics = () => {
           return 'Search Results | Zorbas\' Kitchen';
         }
         if (pathname.startsWith('/result-item/')) {
-          return 'Recipe Details | Zorbas\' Kitchen';
+          // Extract recipe ID from URL for more specific tracking
+          const recipeId = pathname.split('/result-item/')[1];
+          return `Recipe Details (ID: ${recipeId}) | Zorbas\' Kitchen`;
         }
         if (pathname.startsWith('/profile/')) {
           return 'User Profile | Zorbas\' Kitchen';

@@ -162,6 +162,10 @@ function RecipeDetails() {
     useEffect(() => {
         if (recipe && !loading) {
             analytics.trackRecipeView(recipe.title, recipe.id || recipe._id, recipe.isUserRecipe);
+            
+            // Update page title in Google Analytics with specific recipe name
+            const specificPageTitle = `${recipe.title} | Zorbas' Kitchen`;
+            analytics.trackPageView(specificPageTitle, window.location.href);
         }
     }, [recipe, loading]);
 
