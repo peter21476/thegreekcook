@@ -1,54 +1,61 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
-const recipeLikeSchema = new mongoose.Schema({
+const RecipeLike = sequelize.define('RecipeLike', {
+  id: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true
+  },
   recipeId: {
-    type: String,
-    required: true,
+    type: DataTypes.STRING,
+    allowNull: false,
     index: true
   },
   isExternalRecipe: {
-    type: Boolean,
-    default: true
+    type: DataTypes.BOOLEAN,
+    defaultValue: true
   },
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  likedAt: {
-    type: Date,
-    default: Date.now
+  userId: {
+    type: DataTypes.UUID,
+    allowNull: false,
+    references: {
+      model: 'users',
+      key: 'id'
+    },
+    onDelete: 'CASCADE'
   }
 }, {
-  timestamps: true
+  tableName: 'recipe_likes',
+  timestamps: true,
+  indexes: [
+    {
+      unique: true,
+      fields: ['recipeId', 'userId']
+    }
+  ]
 });
 
-// Compound index to ensure a user can only like a recipe once
-recipeLikeSchema.index({ recipeId: 1, user: 1 }, { unique: true });
-
-// Static method to get like count for a recipe
-recipeLikeSchema.statics.getLikeCount = async function(recipeId) {
-  return await this.countDocuments({ recipeId });
+// Static methods
+RecipeLike.getLikeCount = async function(recipeId) {
+  return await this.count({ where: { recipeId } });
 };
 
-// Static method to check if user has liked a recipe
-recipeLikeSchema.statics.hasUserLiked = async function(recipeId, userId) {
-  return await this.exists({ recipeId, user: userId });
+RecipeLike.hasUserLiked = async function(recipeId, userId) {
+  const like = await this.findOne({ where: { recipeId, userId } });
+  return !!like;
 };
 
-// Static method to toggle like
-recipeLikeSchema.statics.toggleLike = async function(recipeId, userId) {
-  const existingLike = await this.findOne({ recipeId, user: userId });
+RecipeLike.toggleLike = async function(recipeId, userId) {
+  const existingLike = await this.findOne({ where: { recipeId, userId } });
   
   if (existingLike) {
-    // Unlike: remove the like
-    await this.deleteOne({ recipeId, user: userId });
+    await this.destroy({ where: { recipeId, userId } });
     return false; // Return false to indicate unliked
   } else {
-    // Like: add the like
-    await this.create({ recipeId, user: userId });
+    await this.create({ recipeId, userId, isExternalRecipe: true });
     return true; // Return true to indicate liked
   }
 };
 
-module.exports = mongoose.model('RecipeLike', recipeLikeSchema);
+module.exports = RecipeLike;

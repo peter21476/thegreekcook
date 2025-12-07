@@ -2,7 +2,8 @@ const express = require('express');
 const { body, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-const User = require('../models/User');
+const { User } = require('../models');
+const { Op } = require('sequelize');
 const { sendWelcomeEmail, sendPasswordResetEmail } = require('../utils/emailService');
 const { getFrontendUrl } = require('../utils/urlUtils');
 
@@ -23,7 +24,11 @@ router.post('/register', [
     const { username, email, password } = req.body;
 
     // Check if user already exists
-    const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+    const existingUser = await User.findOne({ 
+      where: { 
+        [Op.or]: [{ email }, { username }] 
+      } 
+    });
     if (existingUser) {
       return res.status(400).json({ 
         message: 'User already exists',
@@ -32,8 +37,7 @@ router.post('/register', [
     }
 
     // Create new user
-    const user = new User({ username, email, password });
-    await user.save();
+    const user = await User.create({ username, email, password });
 
     // Send welcome email
     try {
@@ -67,7 +71,7 @@ router.post('/login', [
     const { email, password } = req.body;
 
     // Find user
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ where: { email } });
     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
@@ -80,7 +84,7 @@ router.post('/login', [
 
     // Generate token
     const token = jwt.sign(
-      { userId: user._id },
+      { userId: user.id },
       process.env.JWT_SECRET || 'your-secret-key',
       { expiresIn: '7d' }
     );
@@ -88,7 +92,7 @@ router.post('/login', [
     const responseData = {
       token,
       user: {
-        id: user._id,
+        id: user.id,
         username: user.username,
         email: user.email,
         isAdmin: user.isAdmin
@@ -115,7 +119,7 @@ router.post('/forgot-password', [
     const { email } = req.body;
 
     // Find user by email
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ where: { email } });
     if (!user) {
       // Don't reveal if user exists or not for security
       return res.json({ message: 'If an account with that email exists, a password reset link has been sent.' });
@@ -166,8 +170,12 @@ router.post('/reset-password', [
 
     // Find user with valid reset token
     const user = await User.findOne({
-      resetPasswordToken: hashedToken,
-      resetPasswordExpires: { $gt: Date.now() }
+      where: {
+        resetPasswordToken: hashedToken,
+        resetPasswordExpires: {
+          [Op.gt]: new Date()
+        }
+      }
     });
 
     if (!user) {
@@ -186,4 +194,4 @@ router.post('/reset-password', [
   }
 });
 
-module.exports = router; 
+module.exports = router;

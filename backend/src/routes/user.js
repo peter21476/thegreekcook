@@ -1,13 +1,15 @@
 const express = require('express');
 const auth = require('../middleware/auth');
-const User = require('../models/User');
+const { User, UserFavorite } = require('../models');
 
 const router = express.Router();
 
 // Get user profile
 router.get('/profile', auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user._id).select('-password');
+    const user = await User.findByPk(req.user.id, {
+      attributes: { exclude: ['password'] }
+    });
     res.json(user);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching profile' });
@@ -17,8 +19,11 @@ router.get('/profile', auth, async (req, res) => {
 // Get user's favorite recipes
 router.get('/favorites', auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user._id);
-    res.json(user.favorites);
+    const favorites = await UserFavorite.findAll({
+      where: { userId: req.user.id },
+      order: [['createdAt', 'DESC']]
+    });
+    res.json(favorites);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching favorites' });
   }
@@ -27,9 +32,13 @@ router.get('/favorites', auth, async (req, res) => {
 // Check if a recipe is favorited
 router.get('/favorites/check/:recipeId', auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user._id);
-    const isFavorite = user.favorites.some(fav => fav.recipeId === req.params.recipeId);
-    res.json({ isFavorite });
+    const favorite = await UserFavorite.findOne({
+      where: {
+        userId: req.user.id,
+        recipeId: req.params.recipeId
+      }
+    });
+    res.json({ isFavorite: !!favorite });
   } catch (error) {
     res.status(500).json({ message: 'Error checking favorite status' });
   }
@@ -41,15 +50,24 @@ router.post('/favorites/:recipeId', auth, async (req, res) => {
     const { recipeId } = req.params;
     const { title, image } = req.body;
 
-    const user = await User.findById(req.user._id);
-    
     // Check if recipe is already favorited
-    if (user.favorites.some(fav => fav.recipeId === recipeId)) {
+    const existingFavorite = await UserFavorite.findOne({
+      where: {
+        userId: req.user.id,
+        recipeId: recipeId
+      }
+    });
+
+    if (existingFavorite) {
       return res.status(400).json({ message: 'Recipe already in favorites' });
     }
 
-    user.favorites.push({ recipeId, title, image });
-    await user.save();
+    await UserFavorite.create({
+      userId: req.user.id,
+      recipeId: recipeId,
+      title: title,
+      image: image
+    });
 
     res.json({ message: 'Recipe added to favorites' });
   } catch (error) {
@@ -60,9 +78,12 @@ router.post('/favorites/:recipeId', auth, async (req, res) => {
 // Remove recipe from favorites
 router.delete('/favorites/:recipeId', auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user._id);
-    user.favorites = user.favorites.filter(fav => fav.recipeId !== req.params.recipeId);
-    await user.save();
+    await UserFavorite.destroy({
+      where: {
+        userId: req.user.id,
+        recipeId: req.params.recipeId
+      }
+    });
 
     res.json({ message: 'Recipe removed from favorites' });
   } catch (error) {
@@ -79,7 +100,7 @@ router.put('/profile-picture', auth, async (req, res) => {
       return res.status(400).json({ message: 'Profile picture URL is required' });
     }
 
-    const user = await User.findById(req.user._id);
+    const user = await User.findByPk(req.user.id);
     user.profilePicture = profilePicture;
     await user.save();
 
@@ -101,7 +122,7 @@ router.put('/about', auth, async (req, res) => {
       return res.status(400).json({ message: 'About description must be 500 characters or less' });
     }
 
-    const user = await User.findById(req.user._id);
+    const user = await User.findByPk(req.user.id);
     user.about = about || '';
     await user.save();
 
@@ -119,7 +140,10 @@ router.get('/public/:username', async (req, res) => {
   try {
     const { username } = req.params;
     
-    const user = await User.findOne({ username }).select('username profilePicture about createdAt');
+    const user = await User.findOne({
+      where: { username },
+      attributes: ['id', 'username', 'profilePicture', 'about', 'createdAt']
+    });
     
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -139,11 +163,14 @@ router.get('/all', auth, async (req, res) => {
       return res.status(403).json({ message: 'Access denied. Admin privileges required.' });
     }
 
-    const users = await User.find({}).select('username email profilePicture about isAdmin createdAt');
+    const users = await User.findAll({
+      attributes: ['id', 'username', 'email', 'profilePicture', 'about', 'isAdmin', 'createdAt'],
+      order: [['createdAt', 'DESC']]
+    });
     res.json(users);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching users' });
   }
 });
 
-module.exports = router; 
+module.exports = router;

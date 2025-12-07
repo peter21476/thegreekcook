@@ -1,13 +1,14 @@
-const Recipe = require('../models/Recipe');
-const RecipeLike = require('../models/RecipeLike');
+const { Recipe, RecipeLike, RecipeLikeInternal } = require('../models');
+const { Op } = require('sequelize');
 
 class LikeService {
   /**
    * Check if a recipe is internal (stored in our DB) or external (Spoonacular)
    */
   static isInternalRecipe(recipeId) {
-    // Internal recipes have MongoDB ObjectId format (24 hex characters)
-    return /^[0-9a-fA-F]{24}$/.test(recipeId);
+    // Internal recipes have UUID format (36 characters with hyphens)
+    // External recipes are numeric strings (Spoonacular IDs)
+    return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(recipeId);
   }
 
   /**
@@ -15,9 +16,8 @@ class LikeService {
    */
   static async getLikeCount(recipeId) {
     if (this.isInternalRecipe(recipeId)) {
-      // Internal recipe - get from Recipe model
-      const recipe = await Recipe.findById(recipeId);
-      return recipe ? recipe.likeCount : 0;
+      // Internal recipe - get from RecipeLikeInternal model
+      return await RecipeLikeInternal.count({ where: { recipeId } });
     } else {
       // External recipe - get from RecipeLike model
       return await RecipeLike.getLikeCount(recipeId);
@@ -29,9 +29,11 @@ class LikeService {
    */
   static async hasUserLiked(recipeId, userId) {
     if (this.isInternalRecipe(recipeId)) {
-      // Internal recipe - check Recipe model
-      const recipe = await Recipe.findById(recipeId);
-      return recipe ? recipe.isLikedBy(userId) : false;
+      // Internal recipe - check RecipeLikeInternal model
+      const like = await RecipeLikeInternal.findOne({ 
+        where: { recipeId, userId } 
+      });
+      return !!like;
     } else {
       // External recipe - check RecipeLike model
       return await RecipeLike.hasUserLiked(recipeId, userId);
@@ -43,15 +45,18 @@ class LikeService {
    */
   static async toggleLike(recipeId, userId) {
     if (this.isInternalRecipe(recipeId)) {
-      // Internal recipe - use Recipe model methods
-      const recipe = await Recipe.findById(recipeId);
-      if (!recipe) {
-        throw new Error('Recipe not found');
-      }
+      // Internal recipe - use RecipeLikeInternal model
+      const existingLike = await RecipeLikeInternal.findOne({ 
+        where: { recipeId, userId } 
+      });
       
-      const wasLiked = recipe.toggleLike(userId);
-      await recipe.save();
-      return wasLiked;
+      if (existingLike) {
+        await RecipeLikeInternal.destroy({ where: { recipeId, userId } });
+        return false; // Return false to indicate unliked
+      } else {
+        await RecipeLikeInternal.create({ recipeId, userId });
+        return true; // Return true to indicate liked
+      }
     } else {
       // External recipe - use RecipeLike model methods
       return await RecipeLike.toggleLike(recipeId, userId);

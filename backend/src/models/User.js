@@ -1,109 +1,102 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 
-const userSchema = new mongoose.Schema({
+const User = sequelize.define('User', {
+  id: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true
+  },
   username: {
-    type: String,
-    required: true,
+    type: DataTypes.STRING,
+    allowNull: false,
     unique: true,
-    trim: true,
-    minlength: 3
+    validate: {
+      len: [3, Infinity]
+    }
   },
   email: {
-    type: String,
-    required: true,
+    type: DataTypes.STRING,
+    allowNull: false,
     unique: true,
-    trim: true,
-    lowercase: true
+    validate: {
+      isEmail: true
+    }
   },
   password: {
-    type: String,
-    required: true,
-    minlength: 6
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      len: [6, Infinity]
+    }
   },
   profilePicture: {
-    type: String,
-    default: null
+    type: DataTypes.STRING,
+    allowNull: true
   },
   about: {
-    type: String,
-    maxlength: 500,
-    default: ''
+    type: DataTypes.TEXT,
+    allowNull: true,
+    validate: {
+      len: [0, 500]
+    }
   },
   isAdmin: {
-    type: Boolean,
-    default: false
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
   },
   resetPasswordToken: {
-    type: String,
-    default: null
+    type: DataTypes.STRING,
+    allowNull: true
   },
   resetPasswordExpires: {
-    type: Date,
-    default: null
-  },
-  favorites: [{
-    recipeId: {
-      type: String,
-      required: true
-    },
-    title: String,
-    image: String,
-    addedAt: {
-      type: Date,
-      default: Date.now
-    }
-  }]
+    type: DataTypes.DATE,
+    allowNull: true
+  }
 }, {
-  timestamps: true
-});
-
-// Hash password before saving
-userSchema.pre('save', async function(next) {
-  if (!this.isModified('password')) return next();
-  
-  try {
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
-    next();
-  } catch (error) {
-    next(error);
+  tableName: 'users',
+  timestamps: true,
+  hooks: {
+    beforeCreate: async (user) => {
+      // Only hash if password doesn't start with $2a$ (bcrypt hash indicator)
+      if (user.password && !user.password.startsWith('$2a$')) {
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(user.password, salt);
+      }
+    },
+    beforeUpdate: async (user) => {
+      // Only hash if password changed and doesn't start with $2a$ (bcrypt hash indicator)
+      if (user.changed('password') && user.password && !user.password.startsWith('$2a$')) {
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(user.password, salt);
+      }
+    }
   }
 });
 
-// Method to compare passwords
-userSchema.methods.comparePassword = async function(candidatePassword) {
-  try {
-    const isMatch = await bcrypt.compare(candidatePassword, this.password);
-    return isMatch;
-  } catch (error) {
-    throw error;
-  }
+// Instance methods
+User.prototype.comparePassword = async function(candidatePassword) {
+  return await bcrypt.compare(candidatePassword, this.password);
 };
 
-// Method to generate password reset token
-userSchema.methods.generatePasswordResetToken = function() {
+User.prototype.generatePasswordResetToken = function() {
   const resetToken = crypto.randomBytes(32).toString('hex');
   
-  // Hash the token and save to database
   this.resetPasswordToken = crypto
     .createHash('sha256')
     .update(resetToken)
     .digest('hex');
   
-  // Set expiration (1 hour from now)
   this.resetPasswordExpires = Date.now() + 3600000; // 1 hour
   
   return resetToken;
 };
 
-// Method to clear password reset token
-userSchema.methods.clearPasswordResetToken = function() {
-  this.resetPasswordToken = undefined;
-  this.resetPasswordExpires = undefined;
+User.prototype.clearPasswordResetToken = function() {
+  this.resetPasswordToken = null;
+  this.resetPasswordExpires = null;
 };
 
-const User = mongoose.model('User', userSchema);
-
-module.exports = User; 
+module.exports = User;

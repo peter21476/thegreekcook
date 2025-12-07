@@ -1,6 +1,5 @@
 require('dotenv').config({ path: '../.env' });
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
@@ -8,6 +7,7 @@ const recipeRoutes = require('./routes/recipe');
 const uploadRoutes = require('./routes/upload');
 const adminRoutes = require('./routes/admin');
 const path = require('path');
+const { sequelize } = require('./models');
 
 const app = express();
 
@@ -15,18 +15,20 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  serverSelectionTimeoutMS: 5000,
-  socketTimeoutMS: 45000,
-})
-.then(() => console.log('Connected to MongoDB Atlas'))
-.catch(err => {
-  console.error('MongoDB connection error:', err);
-  process.exit(1);
-});
+// Connect to PostgreSQL
+sequelize.authenticate()
+  .then(() => {
+    console.log('Connected to PostgreSQL');
+    // Sync models (create tables if they don't exist)
+    return sequelize.sync({ alter: false });
+  })
+  .then(() => {
+    console.log('Database models synchronized');
+  })
+  .catch(err => {
+    console.error('PostgreSQL connection error:', err);
+    process.exit(1);
+  });
 
 // Routes
 app.use('/api/auth', authRoutes);
